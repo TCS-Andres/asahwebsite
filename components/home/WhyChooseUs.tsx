@@ -1,5 +1,6 @@
 import { Container } from "@/components/Container";
 import { EyebrowHeading } from "@/components/EyebrowHeading";
+import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/Section";
 import type { ReactNode } from "react";
 
@@ -67,17 +68,16 @@ export function WhyChooseUs() {
           className="mx-auto max-w-3xl"
         />
         <div className="mt-14 grid gap-6 md:grid-cols-3">
-          {reasons.map((reason) => (
-            <div
-              key={reason.title}
-              className="rounded-3xl bg-cream p-8 transition duration-200 hover:-translate-y-1"
-            >
-              <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-sage text-white">
-                {reason.icon}
-              </span>
-              <h3 className="text-h3 mt-6 text-forest">{reason.title}</h3>
-              <p className="text-body mt-3 text-ink/75">{reason.body}</p>
-            </div>
+          {reasons.map((reason, index) => (
+            <Reveal key={reason.title} className="h-full" delayMs={index * 90}>
+              <div className="group h-full rounded-3xl bg-cream p-8 shadow-soft transition duration-200 ease-out hover:-translate-y-1.5 hover:shadow-soft-lg">
+                <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-sage text-white transition-transform duration-200 ease-out group-hover:scale-105">
+                  {reason.icon}
+                </span>
+                <h3 className="text-h3 mt-6 text-forest">{reason.title}</h3>
+                <p className="text-body mt-3 text-ink/75">{reason.body}</p>
+              </div>
+            </Reveal>
           ))}
         </div>
       </Container>

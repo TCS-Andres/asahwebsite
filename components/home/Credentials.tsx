@@ -1,5 +1,6 @@
 import Image, { type StaticImageData } from "next/image";
 import { Container } from "@/components/Container";
+import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/Section";
 import tbi from "@/public/images/credentials/tbi-ambassador-badge.webp";
 import texasDental from "@/public/images/credentials/texas-dental-association.webp";
@@ -31,20 +32,22 @@ export function Credentials() {
   return (
     <Section background="cream">
       <Container>
-        <ul
-          aria-label="Certifications and professional affiliations"
-          className="flex flex-wrap items-center justify-center gap-x-12 gap-y-8"
-        >
-          {credentials.map((credential) => (
-            <li key={credential.alt}>
-              <Image
-                src={credential.src}
-                alt={credential.alt}
-                className="h-14 w-auto opacity-70 grayscale transition duration-200 hover:opacity-100 hover:grayscale-0 md:h-16"
-              />
-            </li>
-          ))}
-        </ul>
+        <Reveal>
+          <ul
+            aria-label="Certifications and professional affiliations"
+            className="flex flex-wrap items-center justify-center gap-x-12 gap-y-8"
+          >
+            {credentials.map((credential) => (
+              <li key={credential.alt}>
+                <Image
+                  src={credential.src}
+                  alt={credential.alt}
+                  className="h-14 w-auto opacity-70 grayscale transition duration-200 ease-out hover:opacity-100 hover:grayscale-0 md:h-16"
+                />
+              </li>
+            ))}
+          </ul>
+        </Reveal>
       </Container>
     </Section>
   );

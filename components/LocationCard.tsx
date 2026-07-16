@@ -22,7 +22,7 @@ export function LocationCard({
 
   return (
     <div
-      className={`rounded-2xl border border-sage/20 bg-cream p-8 ${className}`.trim()}
+      className={`rounded-3xl border border-sage/15 bg-cream p-8 shadow-soft ${className}`.trim()}
     >
       <h3 className="text-h3 text-forest">{heading}</h3>
 

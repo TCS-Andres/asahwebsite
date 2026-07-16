@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Container } from "@/components/Container";
 import { EyebrowHeading } from "@/components/EyebrowHeading";
+import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/Section";
 import { Sunburst } from "@/components/Sunburst";
 import type { NavLink } from "@/components/site-nav";
@@ -58,34 +59,39 @@ export function OurServices() {
             </p>
           </div>
 
-          <ol className="overflow-hidden rounded-3xl bg-white">
+          <ol className="overflow-hidden rounded-3xl bg-white shadow-soft">
             {homeServices.map((service, index) => (
               <li key={service.href} className="border-b border-cream last:border-b-0">
-                <Link
-                  href={service.href}
-                  className="group flex items-center gap-5 px-6 py-6 transition hover:bg-cream/60 focus-visible:outline-none focus-visible:bg-cream/60"
-                >
-                  <span className="font-display text-2xl text-sage tabular-nums">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <span className="text-h3 flex-1 text-forest">
-                    {service.label}
-                  </span>
-                  <svg
-                    width="22"
-                    height="22"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                    className="shrink-0 text-terracotta transition-transform duration-200 group-hover:translate-x-1"
+                <Reveal delayMs={index * 70}>
+                  <Link
+                    href={service.href}
+                    className="group flex items-center gap-5 px-6 py-5 transition-colors duration-200 ease-out hover:bg-cream/70 focus-visible:outline-none focus-visible:bg-cream/70"
                   >
-                    <path d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </Link>
+                    <span
+                      aria-hidden="true"
+                      className="w-14 shrink-0 font-display text-5xl leading-none tabular-nums text-sage/20 transition-colors duration-200 ease-out group-hover:text-sage/40"
+                    >
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="text-h3 flex-1 text-forest">
+                      {service.label}
+                    </span>
+                    <svg
+                      width="22"
+                      height="22"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                      className="shrink-0 text-terracotta transition-transform duration-200 ease-out group-hover:translate-x-1"
+                    >
+                      <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
+                  </Link>
+                </Reveal>
               </li>
             ))}
           </ol>

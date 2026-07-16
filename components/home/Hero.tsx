@@ -1,30 +1,33 @@
-import Image from "next/image";
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Container";
 import { EyebrowHeading } from "@/components/EyebrowHeading";
+import { HeroVideo } from "@/components/home/HeroVideo";
 import { siteConfig } from "@/lib/site";
-import heroImage from "@/public/images/general/black-woman-morning-stretching-and-wake-up-in-hom-2023-11-27-05-07-23-utc.avif";
 
 /*
-  Full bleed homepage hero. The image sits behind a forest to ink gradient so
-  the copy and the transparent header both stay legible. The negative top margin
-  pulls the hero up under the sticky header so the header floats over the image.
+  Full bleed homepage hero. An ambient background video sits behind a forest to
+  ink gradient so the copy and the transparent header both stay legible. The
+  heading and copy are server rendered for a fast, stable LCP; only the video
+  element is a client component, and it holds on the poster still until motion is
+  allowed. The negative top margin pulls the hero up under the sticky header so
+  the header floats over the video.
 */
 export function Hero() {
   return (
     <section className="relative -mt-20 flex min-h-[100svh] items-center overflow-hidden">
-      <Image
-        src={heroImage}
-        alt="A woman waking and stretching in bed in soft morning light"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
+      <HeroVideo
+        src="/videos/hero-ambient.mp4"
+        poster="/images/general/hero-video-poster.avif"
       />
-      {/* Contrast overlays, kept within the brand token set. */}
-      <div className="absolute inset-0 bg-forest/55" aria-hidden="true" />
+
+      {/* Contrast overlays, kept within the brand token set. A forest to ink
+          wash for depth, plus a left lean so the copy column stays readable. */}
       <div
-        className="absolute inset-0 bg-gradient-to-b from-ink/50 via-transparent to-ink/40"
+        className="absolute inset-0 bg-gradient-to-b from-forest/75 via-forest/45 to-ink/70"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0 bg-gradient-to-r from-ink/50 via-ink/15 to-transparent"
         aria-hidden="true"
       />
 
@@ -47,7 +50,7 @@ export function Hero() {
             <Button href={siteConfig.scheduleHref}>Schedule Appointment</Button>
             <a
               href={siteConfig.phoneHref}
-              className="inline-flex items-center justify-center rounded-full border-2 border-white px-7 py-3 text-base font-semibold text-white transition duration-200 hover:bg-white hover:text-forest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white"
+              className="inline-flex items-center justify-center rounded-full border-2 border-white px-7 py-3 text-base font-semibold text-white transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-white hover:text-forest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white"
             >
               {siteConfig.phone}
             </a>

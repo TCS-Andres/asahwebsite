@@ -8,11 +8,12 @@ import type {
 export type ButtonVariant = "primary" | "outline";
 
 const base =
-  "inline-flex items-center justify-center rounded-full px-7 py-3 text-base font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sage disabled:cursor-not-allowed disabled:opacity-60";
+  "inline-flex items-center justify-center rounded-full px-7 py-3 text-base font-semibold transition duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sage disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0";
 
 const variants: Record<ButtonVariant, string> = {
-  primary: "bg-terracotta text-white hover:brightness-95",
-  outline: "border-2 border-sage text-sage hover:bg-sage hover:text-white",
+  primary: "bg-terracotta text-white hover:brightness-95 hover:shadow-soft-lg",
+  outline:
+    "border-2 border-sage text-sage hover:bg-sage hover:text-white hover:shadow-soft",
 };
 
 interface BaseProps {

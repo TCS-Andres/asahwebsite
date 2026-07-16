@@ -114,13 +114,13 @@ export default async function ServicePage({
                 </Button>
               </div>
             </div>
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl">
+            <div className="group relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-soft-lg">
               <Image
                 src={service.image}
                 alt={service.imageAlt}
                 fill
                 priority
-                className="object-cover"
+                className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                 sizes="(min-width: 1024px) 50vw, 100vw"
               />
             </div>

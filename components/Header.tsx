@@ -93,7 +93,7 @@ export function Header() {
     <header
       className={`sticky top-0 z-40 transition-colors duration-300 ${
         solid
-          ? "bg-white shadow-sm"
+          ? "border-b border-forest/10 bg-white/80 shadow-soft backdrop-blur-md"
           : "bg-transparent"
       }`}
     >

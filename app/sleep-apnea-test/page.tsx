@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Section, Container, EyebrowHeading, Sunburst } from "@/components";
+import { Section, Container, EyebrowHeading, Sunburst, Reveal } from "@/components";
 import { orderedQuizzes } from "@/lib/quizzes";
 import { buildMetadata } from "@/lib/seo";
 
@@ -37,24 +37,25 @@ export default function SleepApneaTestHubPage() {
           </p>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2">
-            {orderedQuizzes.map((quiz) => (
-              <Link
-                key={quiz.slug}
-                href={`/sleep-apnea-test/${quiz.slug}/`}
-                className="group flex flex-col rounded-3xl border-2 border-sage/20 bg-white p-7 transition duration-200 hover:-translate-y-1 hover:border-sage hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sage"
-              >
-                <p className="text-eyebrow">{quiz.audience}</p>
-                <h2 className="text-h3 mt-2 text-forest">{quiz.title}</h2>
-                <p className="text-small mt-3 flex-1 text-ink/80">{quiz.summary}</p>
-                <div className="mt-6 flex items-center justify-between">
-                  <span className="inline-flex items-center rounded-full bg-sage/10 px-3 py-1 text-small font-semibold text-forest">
-                    {quiz.intro.timeEstimate}
-                  </span>
-                  <span className="text-small font-semibold text-terracotta group-hover:underline">
-                    Start
-                  </span>
-                </div>
-              </Link>
+            {orderedQuizzes.map((quiz, index) => (
+              <Reveal key={quiz.slug} className="h-full" delayMs={(index % 2) * 90}>
+                <Link
+                  href={`/sleep-apnea-test/${quiz.slug}/`}
+                  className="group flex h-full flex-col rounded-3xl border-2 border-sage/20 bg-white p-7 shadow-soft transition duration-200 ease-out hover:-translate-y-1.5 hover:border-sage hover:shadow-soft-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sage"
+                >
+                  <p className="text-eyebrow">{quiz.audience}</p>
+                  <h2 className="text-h3 mt-2 text-forest">{quiz.title}</h2>
+                  <p className="text-small mt-3 flex-1 text-ink/80">{quiz.summary}</p>
+                  <div className="mt-6 flex items-center justify-between">
+                    <span className="inline-flex items-center rounded-full bg-sage/10 px-3 py-1 text-small font-semibold text-forest">
+                      {quiz.intro.timeEstimate}
+                    </span>
+                    <span className="text-small font-semibold text-terracotta group-hover:underline">
+                      Start
+                    </span>
+                  </div>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </Container>

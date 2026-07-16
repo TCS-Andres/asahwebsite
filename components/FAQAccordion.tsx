@@ -27,14 +27,16 @@ export function FAQAccordion({ items, className = "" }: FAQAccordionProps) {
   }
 
   return (
-    <div className={`divide-y divide-sage/20 border-y border-sage/20 ${className}`.trim()}>
+    <div
+      className={`divide-y divide-sage/15 overflow-hidden rounded-2xl border border-sage/15 bg-white shadow-soft ${className}`.trim()}
+    >
       {items.map((item, index) => {
         const isOpen = openIndex === index;
         const buttonId = `${baseId}-button-${index}`;
         const panelId = `${baseId}-panel-${index}`;
 
         return (
-          <div key={buttonId}>
+          <div key={buttonId} className={isOpen ? "bg-cream/40" : ""}>
             <h3 className="m-0">
               <button
                 type="button"
@@ -42,15 +44,15 @@ export function FAQAccordion({ items, className = "" }: FAQAccordionProps) {
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => setOpenIndex(isOpen ? null : index)}
-                className="flex w-full items-center justify-between gap-4 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2"
+                className="group flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition-colors duration-200 ease-out hover:bg-cream/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sage"
               >
-                <span className="text-body font-semibold text-forest">
+                <span className="text-body font-semibold text-forest transition-colors duration-200 ease-out group-hover:text-terracotta">
                   {item.question}
                 </span>
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 20 20"
-                  className={`h-5 w-5 flex-shrink-0 text-sage transition-transform duration-200 ${
+                  className={`h-5 w-5 flex-shrink-0 text-sage transition-transform duration-200 ease-out ${
                     isOpen ? "rotate-180" : ""
                   }`}
                   fill="none"
@@ -68,7 +70,7 @@ export function FAQAccordion({ items, className = "" }: FAQAccordionProps) {
               role="region"
               aria-labelledby={buttonId}
               hidden={!isOpen}
-              className="pb-5"
+              className="px-6 pb-5"
             >
               <p className="text-body text-ink">{item.answer}</p>
             </div>

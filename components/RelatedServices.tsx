@@ -40,14 +40,14 @@ export function RelatedServices({
           <Link
             key={service.slug}
             href={`/services/${service.slug}/`}
-            className="group block overflow-hidden rounded-2xl border border-sage/15 bg-white transition duration-200 hover:border-sage/30 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2"
+            className="group block overflow-hidden rounded-3xl border border-sage/15 bg-white shadow-soft transition duration-200 ease-out hover:-translate-y-1.5 hover:border-sage/30 hover:shadow-soft-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2"
           >
             <div className="relative aspect-[16/9] w-full overflow-hidden">
               <Image
                 src={service.image}
                 alt={service.imageAlt}
                 fill
-                className="object-cover transition duration-300 group-hover:scale-105"
+                className="object-cover transition duration-300 ease-out group-hover:scale-105"
                 sizes="(min-width: 640px) 50vw, 100vw"
               />
             </div>

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Container";
 import { EyebrowHeading } from "@/components/EyebrowHeading";
+import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/Section";
 import doctorImage from "@/public/images/doctor/dr-kacie-culotta.avif";
 
@@ -15,7 +16,7 @@ export function MeetDoctor() {
     <Section background="forest">
       <Container>
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <div>
+          <Reveal>
             <EyebrowHeading
               eyebrow="Meet Your Expert, Dr. Kacie M. Culotta"
               heading="A Personal Commitment to Your Health"
@@ -37,17 +38,20 @@ export function MeetDoctor() {
             <div className="mt-9">
               <Button href="/about-us/">Get To Know Dr. Culotta</Button>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-3xl lg:order-last">
+          <Reveal
+            delayMs={120}
+            className="group relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-3xl shadow-soft-lg lg:order-last"
+          >
             <Image
               src={doctorImage}
               alt="Dr. Kacie M. Culotta, airway and sleep dentist in Austin, Texas"
               fill
               sizes="(min-width: 1024px) 40vw, 100vw"
-              className="object-cover object-top"
+              className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
             />
-          </div>
+          </Reveal>
         </div>
       </Container>
     </Section>

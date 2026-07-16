@@ -1,6 +1,7 @@
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Container";
 import { EyebrowHeading } from "@/components/EyebrowHeading";
+import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/Section";
 import { Sunburst } from "@/components/Sunburst";
 import { siteConfig } from "@/lib/site";
@@ -54,12 +55,19 @@ export function TakeTheFirstStep() {
 
         <ol className="mt-12 grid gap-6 md:grid-cols-3">
           {steps.map((step, index) => (
-            <li key={step.title} className="rounded-3xl bg-white p-8">
-              <span className="font-display text-4xl text-sage">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <h3 className="text-h3 mt-4 text-forest">{step.title}</h3>
-              <p className="text-body mt-3 text-ink/75">{step.body}</p>
+            <li key={step.title}>
+              <Reveal className="h-full" delayMs={index * 90}>
+                <div className="h-full rounded-3xl bg-white p-8 shadow-soft transition duration-200 ease-out hover:-translate-y-1.5 hover:shadow-soft-lg">
+                  <span
+                    aria-hidden="true"
+                    className="block font-display text-6xl leading-none tabular-nums text-sage/20"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="text-h3 mt-4 text-forest">{step.title}</h3>
+                  <p className="text-body mt-3 text-ink/75">{step.body}</p>
+                </div>
+              </Reveal>
             </li>
           ))}
         </ol>

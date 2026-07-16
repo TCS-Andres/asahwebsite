@@ -1,6 +1,7 @@
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Container";
 import { EyebrowHeading } from "@/components/EyebrowHeading";
+import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/Section";
 import { siteConfig } from "@/lib/site";
 
@@ -70,8 +71,9 @@ export function RootCauses() {
         </div>
 
         <ul className="mt-12 grid gap-x-10 gap-y-8 sm:grid-cols-2">
-          {symptoms.map((symptom) => (
-            <li key={symptom.label} className="flex gap-4">
+          {symptoms.map((symptom, index) => (
+            <li key={symptom.label}>
+              <Reveal className="flex gap-4" delayMs={(index % 2) * 80}>
               <span
                 className="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sage/15 text-sage"
                 aria-hidden="true"
@@ -95,6 +97,7 @@ export function RootCauses() {
                 </strong>{" "}
                 {symptom.body}
               </p>
+              </Reveal>
             </li>
           ))}
         </ul>

@@ -66,16 +66,16 @@ export function Testimonials() {
           aria-label="Patient testimonials"
           tabIndex={0}
           onKeyDown={onKeyDown}
-          className="relative mx-auto mt-12 max-w-3xl rounded-3xl bg-cream p-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage md:p-12"
+          className="relative mx-auto mt-12 max-w-3xl overflow-hidden rounded-3xl bg-cream p-10 shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage md:p-14"
         >
           <span
             aria-hidden="true"
-            className="block font-display text-6xl leading-none text-sage/40"
+            className="pointer-events-none absolute -left-2 -top-6 select-none font-display text-[9rem] leading-none text-sage/15 md:-top-8 md:text-[11rem]"
           >
             &ldquo;
           </span>
 
-          <div aria-live="polite">
+          <div aria-live="polite" className="relative">
             <blockquote key={index} className="asah-testimonial-fade">
               <p className="text-h3 font-display text-forest">{active.quote}</p>
               <footer className="mt-6">
