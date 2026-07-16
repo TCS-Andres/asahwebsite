@@ -1,6 +1,15 @@
+import type { Metadata } from "next";
 import { Container } from "@/components/Container";
 import { Section } from "@/components/Section";
 import { Markdown } from "@/components/Markdown";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Terms and Conditions",
+  description:
+    "Review the terms and conditions for using the Austin Sleep and Airway Health website and services in Austin, TX, including our online screening tools.",
+  path: "/terms-and-conditions/",
+});
 
 /*
   Terms and Conditions. Live URL /terms-and-conditions/ preserved. Copy is

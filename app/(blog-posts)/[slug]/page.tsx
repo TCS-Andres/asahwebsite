@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -6,7 +7,10 @@ import { Container } from "@/components/Container";
 import { Section } from "@/components/Section";
 import { Markdown } from "@/components/Markdown";
 import { QuizCTA } from "@/components/QuizCTA";
+import { JsonLd } from "@/components/JsonLd";
 import { getPostBySlug, getPostSlugs, formatPostDate } from "@/lib/blog";
+import { buildMetadata } from "@/lib/seo";
+import { articleSchema, breadcrumbSchema } from "@/lib/schema";
 
 /*
   Root-level blog post route. The three migrated posts live at the top level of
@@ -21,6 +25,24 @@ export const dynamicParams = false;
 
 export function generateStaticParams() {
   return getPostSlugs().map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
+  if (!post) return {};
+
+  return buildMetadata({
+    title: post.title,
+    description: post.excerpt,
+    path: `/${slug}/`,
+    ogType: "article",
+    publishedTime: post.publishedAt,
+  });
 }
 
 /*
@@ -71,6 +93,23 @@ export default async function BlogPostPage({
 
   return (
     <main className="flex-1">
+      <JsonLd
+        data={[
+          articleSchema({
+            title: post.title,
+            excerpt: post.excerpt,
+            slug: post.slug,
+            image: post.image,
+            publishedAt: post.publishedAt,
+            updatedAt: post.updatedAt,
+          }),
+          breadcrumbSchema([
+            { name: "Home", url: "/" },
+            { name: "Blog", url: "/blog/" },
+            { name: post.title },
+          ]),
+        ]}
+      />
       <Section background="white">
         <Container className="max-w-3xl">
           <Link

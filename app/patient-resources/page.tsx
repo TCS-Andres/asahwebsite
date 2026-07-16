@@ -1,9 +1,18 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Container";
 import { EyebrowHeading } from "@/components/EyebrowHeading";
 import { Section } from "@/components/Section";
 import { QuizCTA } from "@/components/QuizCTA";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Patient Resources",
+  description:
+    "Find patient forms and helpful resources from Austin Sleep and Airway Health in Austin, TX to prepare for your visit and make the most of your airway care.",
+  path: "/patient-resources/",
+});
 
 /*
   Patient Resources page. The source page (content-source/patient-resources.md)

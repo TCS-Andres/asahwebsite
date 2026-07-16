@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { Analytics } from "@/components/analytics/Analytics";
 
 /*
   Headline font: Super Clarendon, self hosted, exposed as --font-clarendon.
@@ -47,10 +48,38 @@ const mona = localFont({
   fallback: ["system-ui", "-apple-system", "sans-serif"],
 });
 
+/*
+  Site wide metadata. metadataBase, the title template, and the homepage default
+  title live here. The origin literal mirrors siteConfig.domain; it is inlined so
+  this file keeps its existing imports untouched. Per page files set their own
+  canonical, title, description, and Open Graph via lib/seo buildMetadata.
+*/
+const HOME_TITLE = "Airway & Sleep Dentist in Austin, TX";
+const HOME_OG_TITLE =
+  "Airway & Sleep Dentist in Austin, TX | Austin Sleep & Airway Health";
+const HOME_DESCRIPTION =
+  "Dr. Kacie Culotta offers airway focused dental and sleep care in Austin, TX, helping you breathe easier and sleep better with comfortable, personalized care.";
+
 export const metadata: Metadata = {
-  // TODO(SEO worker): replace with full title template, description, openGraph, and metadataBase.
-  title: "Austin Sleep & Airway Health",
-  description: "Placeholder description. TODO: owned by the SEO worker.",
+  metadataBase: new URL("https://austinsleephealth.com"),
+  title: {
+    default: HOME_TITLE,
+    template: "%s | Austin Sleep & Airway Health",
+  },
+  description: HOME_DESCRIPTION,
+  openGraph: {
+    title: HOME_OG_TITLE,
+    description: HOME_DESCRIPTION,
+    url: "https://austinsleephealth.com/",
+    siteName: "Austin Sleep & Airway Health",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: HOME_OG_TITLE,
+    description: HOME_DESCRIPTION,
+  },
 };
 
 export default function RootLayout({
@@ -67,6 +96,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <Analytics />
       </body>
     </html>
   );

@@ -1,6 +1,15 @@
+import type { Metadata } from "next";
 import { Container } from "@/components/Container";
 import { Section } from "@/components/Section";
 import { Markdown } from "@/components/Markdown";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Privacy Policy",
+  description:
+    "Read the privacy policy for Austin Sleep and Airway Health in Austin, TX, covering how we collect, use, and protect your personal information and site data.",
+  path: "/privacy-policy/",
+});
 
 /*
   Privacy Policy. Live URL /privacy-policy/ preserved. Copy is verbatim from

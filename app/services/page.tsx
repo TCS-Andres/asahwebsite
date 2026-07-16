@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/Container";
@@ -6,13 +7,29 @@ import { Section } from "@/components/Section";
 import { Sunburst } from "@/components/Sunburst";
 import { QuizCTA } from "@/components/QuizCTA";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { JsonLd } from "@/components/JsonLd";
 import { getAllServices } from "@/lib/content";
+import { breadcrumbSchema } from "@/lib/schema";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Our Services",
+  description:
+    "Explore airway and sleep services at Austin Sleep and Airway Health in Austin, TX, from CBCT screenings to oral appliances and myofunctional collaboration.",
+  path: "/services/",
+});
 
 export default function ServicesIndexPage() {
   const services = getAllServices();
 
   return (
     <main className="flex-1">
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", url: "/" },
+          { name: "Services" },
+        ])}
+      />
       <Section background="cream" className="relative overflow-hidden">
         <Sunburst
           opacity={0.1}

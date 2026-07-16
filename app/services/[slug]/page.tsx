@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import Markdown from "react-markdown";
@@ -11,11 +12,36 @@ import { QuizCTA } from "@/components/QuizCTA";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { FAQAccordion } from "@/components/FAQAccordion";
 import { RelatedServices } from "@/components/RelatedServices";
+import { JsonLd } from "@/components/JsonLd";
 import { getAllServices, getServiceBySlug } from "@/lib/content";
 import { siteConfig } from "@/lib/site";
+import { buildMetadata } from "@/lib/seo";
+import {
+  serviceSchema,
+  faqPageSchema,
+  breadcrumbSchema,
+} from "@/lib/schema";
 
 export function generateStaticParams() {
   return getAllServices().map((service) => ({ slug: service.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const service = getServiceBySlug(slug);
+  if (!service) return {};
+
+  // The frontmatter metaTitle already carries branding, so use it verbatim.
+  return buildMetadata({
+    title: service.metaTitle,
+    description: service.metaDescription,
+    path: `/services/${slug}/`,
+    titleAbsolute: true,
+  });
 }
 
 export default async function ServicePage({
@@ -41,8 +67,28 @@ export default async function ServicePage({
       imageAlt: item.imageAlt,
     }));
 
+  const jsonLd = [
+    serviceSchema({
+      title: service.title,
+      summary: service.summary,
+      slug: service.slug,
+    }),
+    breadcrumbSchema([
+      { name: "Home", url: "/" },
+      { name: "Services", url: "/services/" },
+      { name: service.title },
+    ]),
+  ];
+
+  if (service.faqs.length > 0) {
+    jsonLd.push(
+      faqPageSchema(service.faqs.map((faq) => ({ q: faq.q, a: faq.a }))),
+    );
+  }
+
   return (
     <main className="flex-1">
+      <JsonLd data={jsonLd} />
       <Section background="cream" className="relative overflow-hidden">
         <Sunburst
           opacity={0.1}

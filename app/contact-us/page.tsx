@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Container } from "@/components/Container";
 import { EyebrowHeading } from "@/components/EyebrowHeading";
 import { Section } from "@/components/Section";
@@ -5,6 +6,14 @@ import { QuizCTA } from "@/components/QuizCTA";
 import { LocationCard } from "@/components/LocationCard";
 import { ContactForm } from "@/components/ContactForm";
 import { siteConfig } from "@/lib/site";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Contact Us",
+  description:
+    "Contact Austin Sleep and Airway Health in Austin, TX to ask a question, request an appointment, or learn how airway focused care can help you breathe easier.",
+  path: "/contact-us/",
+});
 
 /*
   Contact page. Live URL is /contact-us/ and is preserved here. Intro copy is

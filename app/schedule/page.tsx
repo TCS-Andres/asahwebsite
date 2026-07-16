@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Container";
 import { EyebrowHeading } from "@/components/EyebrowHeading";
@@ -6,6 +7,14 @@ import { Sunburst } from "@/components/Sunburst";
 import { LocationCard } from "@/components/LocationCard";
 import { ScheduleForm } from "@/components/ScheduleForm";
 import { siteConfig } from "@/lib/site";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Schedule a Visit",
+  description:
+    "Schedule your visit with Austin Sleep and Airway Health in Austin, TX. Call our team or request an appointment to start toward better breathing and sleep.",
+  path: "/schedule/",
+});
 
 /*
   Schedule page. This replaces the old site's broken "Book Now" target, which

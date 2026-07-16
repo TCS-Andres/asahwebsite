@@ -1,4 +1,8 @@
+import type { Metadata } from "next";
 import Image from "next/image";
+import { JsonLd } from "@/components/JsonLd";
+import { personSchema } from "@/lib/schema";
+import { buildMetadata } from "@/lib/seo";
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Container";
 import { EyebrowHeading } from "@/components/EyebrowHeading";
@@ -61,9 +65,17 @@ const values = [
   },
 ];
 
+export const metadata: Metadata = buildMetadata({
+  title: "About Dr. Kacie Culotta",
+  description:
+    "Meet Dr. Kacie Culotta and the Austin, TX team behind Austin Sleep and Airway Health, where airway focused care helps you breathe, sleep, and feel your best.",
+  path: "/about-us/",
+});
+
 export default function AboutPage() {
   return (
     <main className="flex-1">
+      <JsonLd data={personSchema()} />
       {/* Hero */}
       <Section background="cream" className="relative overflow-hidden">
         <Sunburst

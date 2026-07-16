@@ -1,6 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Section, Container, EyebrowHeading, Sunburst } from "@/components";
 import { orderedQuizzes } from "@/lib/quizzes";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Free Sleep Screenings",
+  description:
+    "Take a free, educational sleep and airway screening from Austin Sleep and Airway Health in Austin, TX to learn how our team can help you sleep better.",
+  path: "/sleep-apnea-test/",
+});
 
 /*
   Screening hub. Intro plus one card per quiz, each with its audience label and

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/Container";
@@ -5,6 +6,14 @@ import { EyebrowHeading } from "@/components/EyebrowHeading";
 import { Section } from "@/components/Section";
 import { QuizCTA } from "@/components/QuizCTA";
 import { getAllPosts, formatPostDate } from "@/lib/blog";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Sleep & Airway Blog",
+  description:
+    "Read sleep and airway health insights from Austin Sleep and Airway Health in Austin, TX, with guidance on sleep apnea, breathing, and comfortable care.",
+  path: "/blog/",
+});
 
 /*
   Blog index. Lists the three migrated posts as cards. Each card links to the

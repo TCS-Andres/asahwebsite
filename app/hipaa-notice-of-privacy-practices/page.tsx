@@ -1,7 +1,16 @@
+import type { Metadata } from "next";
 import { Container } from "@/components/Container";
 import { Section } from "@/components/Section";
 import { Markdown } from "@/components/Markdown";
 import { siteConfig } from "@/lib/site";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "HIPAA Privacy Practices",
+  description:
+    "Read the HIPAA Notice of Privacy Practices for Austin Sleep and Airway Health in Austin, TX, describing how your protected health information may be used.",
+  path: "/hipaa-notice-of-privacy-practices/",
+});
 
 /*
   HIPAA Notice of Privacy Practices. Live URL /hipaa-notice-of-privacy-practices/
