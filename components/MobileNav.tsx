@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Button } from "./Button";
 import { siteConfig } from "@/lib/site";
 import { primaryNav, services } from "./site-nav";
@@ -16,12 +17,24 @@ export interface MobileNavProps {
   It is a dialog: focus moves into the panel on open, Tab is trapped inside,
   Escape closes it, and body scroll is locked while it is open. There are no
   social icons here on purpose, the client URLs are still pending.
+
+  The panel is PORTALED to document.body. It must not render inside the
+  header: the solid header uses backdrop-filter, which makes the header the
+  containing block for fixed descendants, so a fixed inset-0 panel rendered
+  inside it gets trapped in the 80px header box instead of covering the
+  viewport. Keep the portal even if the header styling changes.
 */
 export function MobileNav({ open, onClose }: MobileNavProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const servicesPanelId = useId();
+
+  // Portal target exists only in the browser.
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Lock body scroll while the panel is open.
   useEffect(() => {
@@ -70,7 +83,9 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open, onClose]);
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <div
       className={`fixed inset-0 z-50 lg:hidden ${
         open ? "" : "pointer-events-none"
@@ -194,6 +209,7 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
           </div>
         </nav>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

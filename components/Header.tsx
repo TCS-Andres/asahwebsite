@@ -31,6 +31,8 @@ export function Header() {
   const firstServiceRef = useRef<HTMLAnchorElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const wasMobileOpen = useRef(false);
+  const closeTimerRef = useRef<number | null>(null);
+  const openedByHoverRef = useRef(false);
 
   const solid = !isHome || scrolled;
 
@@ -53,6 +55,62 @@ export function Header() {
   }, [mobileOpen]);
 
   const closeServices = useCallback(() => setServicesOpen(false), []);
+
+  /*
+    Hover intent handling. Opening is immediate. Closing waits 180ms so a
+    pointer that briefly slips off the trigger or the menu edge does not
+    slam the menu shut mid travel.
+  */
+  const cancelScheduledClose = useCallback(() => {
+    if (closeTimerRef.current !== null) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
+
+  const openServicesByHover = useCallback(() => {
+    cancelScheduledClose();
+    openedByHoverRef.current = true;
+    setServicesOpen(true);
+  }, [cancelScheduledClose]);
+
+  const scheduleServicesClose = useCallback(() => {
+    cancelScheduledClose();
+    closeTimerRef.current = window.setTimeout(() => {
+      closeTimerRef.current = null;
+      setServicesOpen(false);
+    }, 180);
+  }, [cancelScheduledClose]);
+
+  useEffect(() => cancelScheduledClose, [cancelScheduledClose]);
+
+  /*
+    A click on the trigger right after hover already opened the menu must not
+    toggle it shut, that reads as the menu refusing to open. The first click
+    after a hover open is absorbed; any later click toggles normally. Touch
+    devices fire a synthetic mouseenter before click, so the first tap opens
+    and holds, and a second tap closes.
+  */
+  function onTriggerClick() {
+    if (servicesOpen && openedByHoverRef.current) {
+      openedByHoverRef.current = false;
+      return;
+    }
+    openedByHoverRef.current = false;
+    setServicesOpen((value) => !value);
+  }
+
+  // Close on any press outside the trigger plus menu, covers touch tablets.
+  useEffect(() => {
+    if (!servicesOpen) return;
+    function onPointerDown(event: PointerEvent) {
+      if (!servicesWrapperRef.current?.contains(event.target as Node)) {
+        setServicesOpen(false);
+      }
+    }
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [servicesOpen]);
 
   // Close the dropdown when focus leaves the trigger plus menu wrapper.
   function onServicesBlur(event: React.FocusEvent<HTMLDivElement>) {
@@ -117,8 +175,8 @@ export function Header() {
           <div
             ref={servicesWrapperRef}
             className="relative"
-            onMouseEnter={() => setServicesOpen(true)}
-            onMouseLeave={() => setServicesOpen(false)}
+            onMouseEnter={openServicesByHover}
+            onMouseLeave={scheduleServicesClose}
             onBlur={onServicesBlur}
           >
             <button
@@ -127,7 +185,7 @@ export function Header() {
               aria-haspopup="menu"
               aria-expanded={servicesOpen}
               aria-controls={servicesMenuId}
-              onClick={() => setServicesOpen((value) => !value)}
+              onClick={onTriggerClick}
               onKeyDown={onTriggerKeyDown}
               className={`inline-flex items-center gap-1 text-base font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage rounded ${navLinkClass}`}
             >
@@ -150,29 +208,41 @@ export function Header() {
               </svg>
             </button>
 
+            {/*
+              The pt-3 gap lives INSIDE this hoverable wrapper, so the pointer
+              never leaves the hover area while traveling from the trigger down
+              into the menu. A margin here would be dead space that fired
+              mouseleave and closed the menu mid travel.
+            */}
             <div
-              id={servicesMenuId}
-              role="menu"
-              aria-label="Services"
-              onKeyDown={onMenuKeyDown}
-              className={`absolute left-1/2 top-full z-50 mt-3 w-72 -translate-x-1/2 rounded-2xl border border-ink/5 bg-white p-2 shadow-xl transition duration-200 ${
-                servicesOpen
-                  ? "visible opacity-100 translate-y-0"
-                  : "invisible opacity-0 -translate-y-1"
+              className={`absolute left-1/2 top-full z-50 -translate-x-1/2 pt-3 ${
+                servicesOpen ? "visible" : "invisible pointer-events-none"
               }`}
             >
-              {services.map((service, index) => (
-                <Link
-                  key={service.href}
-                  href={service.href}
-                  role="menuitem"
-                  ref={index === 0 ? firstServiceRef : undefined}
-                  onClick={closeServices}
-                  className="block rounded-xl px-4 py-2.5 text-small font-medium text-forest transition hover:bg-cream hover:text-terracotta focus-visible:outline-none focus-visible:bg-cream focus-visible:text-terracotta"
-                >
-                  {service.label}
-                </Link>
-              ))}
+              <div
+                id={servicesMenuId}
+                role="menu"
+                aria-label="Services"
+                onKeyDown={onMenuKeyDown}
+                className={`w-72 rounded-2xl border border-ink/5 bg-white p-2 shadow-xl transition duration-200 ${
+                  servicesOpen
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 -translate-y-1"
+                }`}
+              >
+                {services.map((service, index) => (
+                  <Link
+                    key={service.href}
+                    href={service.href}
+                    role="menuitem"
+                    ref={index === 0 ? firstServiceRef : undefined}
+                    onClick={closeServices}
+                    className="block rounded-xl px-4 py-2.5 text-small font-medium text-forest transition hover:bg-cream hover:text-terracotta focus-visible:outline-none focus-visible:bg-cream focus-visible:text-terracotta"
+                  >
+                    {service.label}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
 
