@@ -1,26 +1,92 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+  Austin Sleep and Airway Health design tokens.
+  This is the single source of truth for brand color and typography.
+  Do not introduce colors outside the set defined below.
+*/
+
+@theme {
+  /* Brand colors */
+  --color-sage: #5e8472; /* primary brand green */
+  --color-forest: #49665a; /* dark green, headings */
+  --color-terracotta: #d17960; /* primary accent, CTAs */
+  --color-salmon: #f09b85; /* secondary accent, soft backgrounds */
+  --color-gold: #cca257; /* small highlights only */
+  --color-cream: #f5f5f0; /* alternating section backgrounds */
+  --color-ink: #0a0a0a; /* body text */
+  --color-white: #ffffff;
+
+  /* Font families, driven by next/font/local css variables set in layout.tsx */
+  --font-display: var(--font-clarendon), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-mona), system-ui, -apple-system, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Base document defaults */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-white);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*
+  Type scale utilities.
+  Use these class names directly in markup. Utilities in later Tailwind
+  layers can still override individual properties when needed.
+*/
+@layer components {
+  .text-display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.75rem, 5vw, 4.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  .text-h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.25rem, 4vw, 3.5rem);
+    line-height: 1.1;
+  }
+
+  .text-h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    line-height: 1.15;
+  }
+
+  .text-h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+
+  .text-eyebrow {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-sage);
+  }
+
+  .text-body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  .text-small {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
 }
