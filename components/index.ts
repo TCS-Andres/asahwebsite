@@ -20,3 +20,6 @@ export type { SectionProps, SectionBackground } from "./Section";
 
 export { Sunburst } from "./Sunburst";
 export type { SunburstProps } from "./Sunburst";
+
+export { QuizCTA } from "./QuizCTA";
+export type { QuizCTAProps } from "./QuizCTA";

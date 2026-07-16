@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 /*
   Headline font: Super Clarendon, self hosted, exposed as --font-clarendon.
@@ -62,9 +64,9 @@ export default function RootLayout({
       className={`${clarendon.variable} ${mona.variable} h-full`}
     >
       <body className="min-h-full flex flex-col font-sans text-ink antialiased">
-        {/* SLOT: a later worker imports and renders the site Header here. */}
+        <Header />
         {children}
-        {/* SLOT: a later worker imports and renders the site Footer here. */}
+        <Footer />
       </body>
     </html>
   );

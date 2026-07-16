@@ -146,6 +146,18 @@ The SVG uses a `0 0 200 100` viewBox, so a two to one width to height ratio keep
 </div>
 ```
 
+## QuizCTA
+
+The repeating sage quiz banner (homepage section 7, bottom of every service page). Fully self contained: renders its own sage section band with eyebrow, heading, body, and a terracotta button linking to the quiz hub. Every prop has an on brand default, so `<QuizCTA />` with no props is the standard usage. Do not fork, restyle, or wrap it in another Section.
+
+Props (all optional): `eyebrow`, `heading`, `body`, `buttonLabel` (strings), `className` (appended to the outer section).
+
+```tsx
+import { QuizCTA } from "@/components";
+
+<QuizCTA />
+```
+
 ## siteConfig
 
 The single source of truth for shared site data. Import it, do not hardcode name, address, phone, hours, or links anywhere else.

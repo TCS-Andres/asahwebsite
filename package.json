@@ -10,12 +10,19 @@
   },
   "dependencies": {
     "@fontsource-variable/mona-sans": "^5.2.8",
+    "gray-matter": "^4.0.3",
     "next": "16.2.10",
+    "next-mdx-remote": "^6.0.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "resend": "^6.17.2",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@tailwindcss/typography": "^0.5.20",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
