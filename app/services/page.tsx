@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import { Container } from "@/components/Container";
+import { ServiceCard } from "@/components/ServiceCard";
 import { EyebrowHeading } from "@/components/EyebrowHeading";
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/Section";
@@ -58,39 +57,33 @@ export default function ServicesIndexPage() {
 
       <Section background="white">
         <Container>
-          <ol className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {services.map((service, index) => (
-              <li key={service.slug} className="h-full">
-                <Reveal className="h-full" delayMs={(index % 3) * 90}>
-                <Link
-                  href={`/services/${service.slug}/`}
-                  className="group flex h-full flex-col overflow-hidden rounded-3xl border border-sage/15 bg-white shadow-soft transition duration-200 ease-out hover:-translate-y-1.5 hover:border-sage/30 hover:shadow-soft-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2"
+          <ol className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+            {services.map((service, index) => {
+              const featured = index === 0;
+              return (
+                <li
+                  key={service.slug}
+                  className={featured ? "md:col-span-2" : ""}
                 >
-                  <div className="relative aspect-[3/2] w-full overflow-hidden">
-                    <Image
-                      src={service.image}
-                      alt={service.imageAlt}
-                      fill
-                      className="object-cover transition duration-300 ease-out group-hover:scale-105"
-                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  <Reveal delayMs={(index % 2) * 90}>
+                    <ServiceCard
+                      title={service.title}
+                      summary={service.summary}
+                      href={`/services/${service.slug}/`}
+                      image={service.image}
+                      imageAlt={service.imageAlt}
+                      number={String(service.order).padStart(2, "0")}
+                      featured={featured}
+                      sizes={
+                        featured
+                          ? "(min-width: 1280px) 1152px, 100vw"
+                          : "(min-width: 768px) 50vw, 100vw"
+                      }
                     />
-                  </div>
-                  <div className="flex flex-1 flex-col p-6">
-                    <p className="text-eyebrow text-gold">
-                      {String(service.order).padStart(2, "0")}
-                    </p>
-                    <h2 className="text-h3 mt-2 text-forest">{service.title}</h2>
-                    <p className="text-small mt-3 text-ink/80">
-                      {service.summary}
-                    </p>
-                    <span className="text-eyebrow mt-5 inline-block text-terracotta">
-                      Learn more
-                    </span>
-                  </div>
-                </Link>
-                </Reveal>
-              </li>
-            ))}
+                  </Reveal>
+                </li>
+              );
+            })}
           </ol>
         </Container>
       </Section>

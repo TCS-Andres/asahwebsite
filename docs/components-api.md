@@ -146,6 +146,25 @@ The SVG uses a `0 0 200 100` viewBox, so a two to one width to height ratio keep
 </div>
 ```
 
+## ServiceCard
+
+Image-first service card with a color reveal: the photo is desaturated on desktop and blooms to color on hover while it scales, the arrow rotates, and the Super Clarendon title rolls letter by letter (word aware, so long names wrap cleanly). Pure CSS, no client JavaScript, motion gated behind motion-safe. Used on the services index and the RelatedServices strip.
+
+Props: `title`, `summary`, `href`, `image`, `imageAlt` (required strings), `number` ("01" corner label, optional), `featured` (boolean, taller lead card), `sizes` (next/image sizes hint), `className`.
+
+```tsx
+import { ServiceCard } from "@/components";
+
+<ServiceCard
+  title="Sleep Appliances"
+  summary="Custom fit oral appliances made in Austin."
+  href="/services/sleep-appliances/"
+  image="/images/services/oral-care-mandibular-device-for-sleep-apneaaustin-texas.avif"
+  imageAlt="Custom oral sleep appliance"
+  number="01"
+/>
+```
+
 ## QuizCTA
 
 The repeating sage quiz banner (homepage section 7, bottom of every service page). Fully self contained: renders its own sage section band with eyebrow, heading, body, and a terracotta button linking to the quiz hub. Every prop has an on brand default, so `<QuizCTA />` with no props is the standard usage. Do not fork, restyle, or wrap it in another Section.

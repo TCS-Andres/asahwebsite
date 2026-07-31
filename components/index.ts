@@ -24,5 +24,8 @@ export type { SunburstProps } from "./Sunburst";
 export { Reveal } from "./Reveal";
 export type { RevealProps } from "./Reveal";
 
+export { ServiceCard } from "./ServiceCard";
+export type { ServiceCardProps } from "./ServiceCard";
+
 export { QuizCTA } from "./QuizCTA";
 export type { QuizCTAProps } from "./QuizCTA";
