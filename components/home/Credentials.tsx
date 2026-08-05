@@ -44,7 +44,7 @@ function LogoGroup({ clone = false }: { clone?: boolean }) {
           <Image
             src={credential.src}
             alt={clone ? "" : credential.alt}
-            className="h-10 w-auto opacity-70 grayscale transition duration-300 ease-out group-hover:opacity-100 group-hover:grayscale-0 md:h-12"
+            className="h-16 w-auto transition-transform duration-300 ease-out hover:scale-105 md:h-20"
           />
         </li>
       ))}
