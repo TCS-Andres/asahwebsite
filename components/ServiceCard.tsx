@@ -80,56 +80,20 @@ export function ServiceCard({
         </div>
 
         <div>
-          <RollingTitle title={title} />
+          {/*
+            The title stays fully legible at rest and brightens as one unit on
+            hover, a gentle fade in unison rather than a per letter roll, which
+            clipped the text mid motion and was hard to read. Gated behind
+            motion-safe, so reduced motion users see the static full white title.
+          */}
+          <span className="block font-display text-2xl leading-[1.2] text-white transition-opacity duration-500 ease-out motion-safe:opacity-85 motion-safe:group-hover:opacity-100">
+            {title}
+          </span>
           <p className="text-small mt-1.5 line-clamp-2 max-w-md text-cream/85">
             {summary}
           </p>
         </div>
       </div>
     </Link>
-  );
-}
-
-/*
-  The rolling headline. Each letter lives in a clipped box holding two stacked
-  copies; on hover the stack slides up half its height, so the letter appears
-  to roll over, staggered 35ms per letter like the reference design. Letters
-  are grouped inside whitespace-nowrap word wrappers so long service names
-  wrap at word boundaries, never mid word. Screen readers get the plain title,
-  the animated copy is decorative.
-*/
-function RollingTitle({ title }: { title: string }) {
-  let letterIndex = 0;
-
-  return (
-    <span className="block font-display text-2xl leading-[1.2] text-white">
-      <span className="sr-only">{title}</span>
-      <span aria-hidden="true">
-        {title.split(" ").map((word, wordAt) => (
-          <span key={wordAt}>
-            <span className="inline-block whitespace-nowrap">
-              {word.split("").map((letter, letterAt) => {
-                const delayMs = letterIndex * 35;
-                letterIndex += 1;
-                return (
-                  <span
-                    key={letterAt}
-                    className="inline-block h-[1.2em] overflow-hidden align-bottom"
-                  >
-                    <span
-                      className="flex min-w-1 flex-col transition-transform duration-500 motion-safe:group-hover:-translate-y-1/2"
-                      style={{ transitionDelay: `${delayMs}ms` }}
-                    >
-                      <span>{letter}</span>
-                      <span>{letter}</span>
-                    </span>
-                  </span>
-                );
-              })}
-            </span>{" "}
-          </span>
-        ))}
-      </span>
-    </span>
   );
 }
