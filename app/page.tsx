@@ -9,7 +9,7 @@ import { OurServices } from "@/components/home/OurServices";
 import { RootCauses } from "@/components/home/RootCauses";
 import { MeetDoctor } from "@/components/home/MeetDoctor";
 import { Credentials } from "@/components/home/Credentials";
-import { Testimonials } from "@/components/home/Testimonials";
+import { GoogleReviews } from "@/components/home/GoogleReviews";
 import { TakeTheFirstStep } from "@/components/home/TakeTheFirstStep";
 
 /*
@@ -35,7 +35,7 @@ export default function Home() {
       <RootCauses />
       <MeetDoctor />
       <Credentials />
-      <Testimonials />
+      <GoogleReviews />
       <QuizCTA />
       <TakeTheFirstStep />
     </main>
