@@ -9,15 +9,16 @@ export interface ServiceCardProps {
   imageAlt: string;
   /* "01" style label shown in the top left corner. Omit to hide. */
   number?: string;
-  /* Featured cards are taller, for a lead card spanning the full grid width. */
-  featured?: boolean;
+  /* Height utility for the card. Defaults to a compact height so a dense
+     grid of cards stays short. Pass a taller value for a hero placement. */
+  heightClass?: string;
   /* Passed to next/image so the browser downloads a sensibly sized file. */
   sizes?: string;
   className?: string;
 }
 
 /*
-  Image-first service card with a color reveal. The photo sits desaturated on
+  Image first service card with a color reveal. The photo sits desaturated on
   desktop and blooms to full color on hover while it gently scales, the arrow
   rotates to point at the destination, and the Super Clarendon title rolls
   letter by letter. Everything is pure CSS driven by the group hover state:
@@ -32,16 +33,14 @@ export function ServiceCard({
   image,
   imageAlt,
   number,
-  featured = false,
-  sizes = "(min-width: 768px) 50vw, 100vw",
+  heightClass = "h-60 sm:h-64",
+  sizes = "(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw",
   className = "",
 }: ServiceCardProps) {
   return (
     <Link
       href={href}
-      className={`group relative block w-full overflow-hidden rounded-3xl shadow-soft transition-shadow duration-300 hover:shadow-soft-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2 ${
-        featured ? "h-72 md:h-[26rem]" : "h-72"
-      } ${className}`}
+      className={`group relative block w-full overflow-hidden rounded-3xl shadow-soft transition-shadow duration-300 hover:shadow-soft-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2 ${heightClass} ${className}`}
     >
       <Image
         src={image}
@@ -54,10 +53,10 @@ export function ServiceCard({
       {/* Legibility wash. Always present so cream text passes contrast. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/30 to-ink/10 transition-opacity duration-500"
+        className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/25 to-ink/5 transition-opacity duration-500"
       />
 
-      <div className="relative z-10 flex h-full flex-col justify-between p-6">
+      <div className="relative z-10 flex h-full flex-col justify-between p-5">
         <div className="flex items-start justify-between">
           {number ? (
             <span className="text-eyebrow text-gold">{number}</span>
@@ -65,8 +64,8 @@ export function ServiceCard({
             <span />
           )}
           <svg
-            width="28"
-            height="28"
+            width="26"
+            height="26"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -81,8 +80,10 @@ export function ServiceCard({
         </div>
 
         <div>
-          <RollingTitle title={title} featured={featured} />
-          <p className="text-small mt-2 max-w-xl text-cream/90">{summary}</p>
+          <RollingTitle title={title} />
+          <p className="text-small mt-1.5 line-clamp-2 max-w-md text-cream/85">
+            {summary}
+          </p>
         </div>
       </div>
     </Link>
@@ -97,14 +98,11 @@ export function ServiceCard({
   wrap at word boundaries, never mid word. Screen readers get the plain title,
   the animated copy is decorative.
 */
-function RollingTitle({ title, featured }: { title: string; featured: boolean }) {
+function RollingTitle({ title }: { title: string }) {
   let letterIndex = 0;
-  const sizeClass = featured
-    ? "text-2xl md:text-4xl"
-    : "text-2xl md:text-3xl";
 
   return (
-    <span className={`block font-display leading-[1.25] text-white ${sizeClass}`}>
+    <span className="block font-display text-2xl leading-[1.2] text-white">
       <span className="sr-only">{title}</span>
       <span aria-hidden="true">
         {title.split(" ").map((word, wordAt) => (
@@ -116,7 +114,7 @@ function RollingTitle({ title, featured }: { title: string; featured: boolean })
                 return (
                   <span
                     key={letterAt}
-                    className="inline-block h-[1.25em] overflow-hidden align-bottom"
+                    className="inline-block h-[1.2em] overflow-hidden align-bottom"
                   >
                     <span
                       className="flex min-w-1 flex-col transition-transform duration-500 motion-safe:group-hover:-translate-y-1/2"

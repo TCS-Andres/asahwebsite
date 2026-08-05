@@ -57,33 +57,30 @@ export default function ServicesIndexPage() {
 
       <Section background="white">
         <Container>
-          <ol className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
-            {services.map((service, index) => {
-              const featured = index === 0;
-              return (
-                <li
-                  key={service.slug}
-                  className={featured ? "md:col-span-2" : ""}
-                >
-                  <Reveal delayMs={(index % 2) * 90}>
-                    <ServiceCard
-                      title={service.title}
-                      summary={service.summary}
-                      href={`/services/${service.slug}/`}
-                      image={service.image}
-                      imageAlt={service.imageAlt}
-                      number={String(service.order).padStart(2, "0")}
-                      featured={featured}
-                      sizes={
-                        featured
-                          ? "(min-width: 1280px) 1152px, 100vw"
-                          : "(min-width: 768px) 50vw, 100vw"
-                      }
-                    />
-                  </Reveal>
-                </li>
-              );
-            })}
+          {/*
+            Bento grid: a top row of three wider cards, then a bottom row of
+            four narrower cards, on a 12 column track. Matches the homepage
+            Our Services layout so the two read as one system.
+          */}
+          <ol className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-12">
+            {services.map((service, index) => (
+              <li
+                key={service.slug}
+                className={index < 3 ? "lg:col-span-4" : "lg:col-span-3"}
+              >
+                <Reveal delayMs={(index % 4) * 70}>
+                  <ServiceCard
+                    title={service.title}
+                    summary={service.summary}
+                    href={`/services/${service.slug}/`}
+                    image={service.image}
+                    imageAlt={service.imageAlt}
+                    number={String(service.order).padStart(2, "0")}
+                    sizes="(min-width: 1024px) 32vw, (min-width: 640px) 50vw, 100vw"
+                  />
+                </Reveal>
+              </li>
+            ))}
           </ol>
         </Container>
       </Section>
