@@ -100,21 +100,18 @@ export async function POST(request: Request): Promise<Response> {
   const submission = { quiz, answers, result, lead };
   const hashedEmail = hashEmail(lead.email);
 
-  // The internal email decides the success of the request. Every other
-  // destination is best effort and never blocks the response with an error.
-  const internalStatus = await sendInternalNotification(submission);
-
+  // The Web3Forms lead is submitted client side from the quiz flow, since the
+  // Web3Forms free plan only accepts browser submissions. This server route
+  // handles the integrity recompute, the optional Resend internal notification
+  // with full answers for a BAA covered inbox, and the server side analytics
+  // events. Every destination is best effort and skips cleanly when unset.
   await Promise.allSettled([
+    sendInternalNotification(submission),
     sendPatientCopy(submission),
     postMarketingWebhook(submission),
     sendGa4Event(quiz.slug, hashedEmail),
     sendMetaEvent(quiz.slug, hashedEmail),
   ]);
-
-  if (internalStatus === "failed") {
-    // Logged in the adapter. Report a soft failure without leaking detail.
-    return Response.json({ ok: false, error: "delivery failed" }, { status: 502 });
-  }
 
   return Response.json({ ok: true });
 }

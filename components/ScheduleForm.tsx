@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/Button";
+import { submitToWeb3Forms } from "@/lib/web3forms";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
@@ -35,26 +36,57 @@ export function ScheduleForm() {
 
     const form = event.currentTarget;
     const data = new FormData(form);
-    const payload = {
-      formType: "schedule-request",
-      name: String(data.get("name") ?? ""),
-      email: String(data.get("email") ?? ""),
-      phone: String(data.get("phone") ?? ""),
-      preferredTime: String(data.get("preferredTime") ?? ""),
-      reason: String(data.get("reason") ?? ""),
-      company: String(data.get("company") ?? ""),
-    };
+    const name = String(data.get("name") ?? "");
+    const email = String(data.get("email") ?? "");
+    const phone = String(data.get("phone") ?? "");
+    const preferredTime = String(data.get("preferredTime") ?? "");
+    const reason = String(data.get("reason") ?? "");
+    const honeypot = String(data.get("company") ?? "");
 
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) throw new Error("Request failed");
+    // Honeypot: a filled field means a bot. Show success without submitting.
+    if (honeypot.trim() !== "") {
       setStatus("success");
       form.reset();
-    } catch {
+      return;
+    }
+
+    // Primary: Web3Forms client side. Falls back to the server route when the
+    // Web3Forms key is not configured yet, so the form never hard fails.
+    let ok = await submitToWeb3Forms(`New schedule request from ${name}`, {
+      from_name: name,
+      name,
+      email,
+      phone,
+      preferred_time: preferredTime,
+      reason,
+      form: "Schedule request",
+      replyto: email,
+    });
+
+    if (!ok) {
+      try {
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            formType: "schedule-request",
+            name,
+            email,
+            phone,
+            preferredTime,
+            reason,
+          }),
+        });
+        ok = res.ok;
+      } catch {
+        ok = false;
+      }
+    }
+
+    if (ok) {
+      setStatus("success");
+      form.reset();
+    } else {
       setStatus("error");
     }
   }

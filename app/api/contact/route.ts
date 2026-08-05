@@ -96,14 +96,16 @@ export async function POST(request: Request) {
     return Response.json({ ok: true });
   }
 
+  // Contact and schedule forms deliver client side through Web3Forms. This
+  // Resend path stays as an optional server side fallback for when a BAA
+  // covered key is configured. It skips cleanly when unset.
   const apiKey = process.env.RESEND_API_KEY;
   const notifyEmail = process.env.PRACTICE_NOTIFY_EMAIL;
 
-  // Env not provisioned yet: log and succeed without sending (documented above).
   if (!apiKey || !notifyEmail) {
     console.warn(
       "[api/contact] RESEND_API_KEY or PRACTICE_NOTIFY_EMAIL is unset. " +
-        "Submission accepted but no email was sent.",
+        "Submission accepted but no email was sent from the server.",
     );
     return Response.json({ ok: true });
   }

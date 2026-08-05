@@ -10,6 +10,7 @@ import { ProgressBar } from "./ProgressBar";
 import { QuestionCard } from "./QuestionCard";
 import { LeadCaptureForm, type LeadFields } from "./LeadCaptureForm";
 import { storeQuizResult } from "./session";
+import { submitToWeb3Forms } from "@/lib/web3forms";
 
 type Phase = "intro" | "questions" | "lead";
 
@@ -139,22 +140,56 @@ export function QuizFlow({ slug }: QuizFlowProps) {
       savedAt: Date.now(),
     });
 
+    // Honeypot filled means a bot. Skip all delivery, still show the result.
+    const isBot = honeypot.trim() !== "";
+
     // Fire and forget. The result never waits on the network.
-    void fetch("/api/quiz", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      keepalive: true,
-      body: JSON.stringify({
-        quiz: quiz.slug,
-        answers,
-        result: { band: result.band, score: result.score },
-        lead,
-        consent: true,
-        website: honeypot,
-      }),
-    }).catch(() => {
-      // Delivery failures are handled server side. Nothing blocks the patient.
-    });
+    // The server route handles the integrity recompute, the optional Resend
+    // notification with full answers, and the server side analytics events.
+    if (!isBot) {
+      void fetch("/api/quiz", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        keepalive: true,
+        body: JSON.stringify({
+          quiz: quiz.slug,
+          answers,
+          result: { band: result.band, score: result.score },
+          lead,
+          consent: true,
+          website: honeypot,
+        }),
+      }).catch(() => {
+        // Delivery failures are handled server side. Nothing blocks the patient.
+      });
+
+      // Lead notification through Web3Forms, client side because the free plan
+      // only accepts browser submissions. Only the contact fields plus which
+      // screening and the score band are sent, never the raw per question
+      // answers, which are protected health data and stay off this non BAA tool.
+      const scoreText =
+        result.score !== undefined
+          ? `${result.score}${result.maxScore ? ` of ${result.maxScore}` : ""}`
+          : "Not scored numerically";
+      void submitToWeb3Forms(
+        `New screening lead: ${quiz.title} (${result.band})`,
+        {
+          from_name: lead.name,
+          name: lead.name,
+          email: lead.email,
+          phone: lead.phone,
+          city: lead.city,
+          state: lead.state,
+          screening: quiz.title,
+          result_band: result.band,
+          score: scoreText,
+          replyto: lead.email,
+          note: "Screening lead. Per question answers are intentionally omitted to keep protected health data off a non BAA tool.",
+        },
+      ).catch(() => {
+        // Never block the patient on a delivery failure.
+      });
+    }
 
     router.push(`/sleep-apnea-test/${quiz.slug}/results/`);
   };
