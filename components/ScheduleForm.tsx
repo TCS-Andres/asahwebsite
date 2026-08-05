@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/Button";
-import { submitToWeb3Forms } from "@/lib/web3forms";
+import { submitToWeb3Forms, WEB3FORMS_CONTACT_KEY } from "@/lib/web3forms";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
@@ -52,16 +52,20 @@ export function ScheduleForm() {
 
     // Primary: Web3Forms client side. Falls back to the server route when the
     // Web3Forms key is not configured yet, so the form never hard fails.
-    let ok = await submitToWeb3Forms(`New schedule request from ${name}`, {
-      from_name: name,
-      name,
-      email,
-      phone,
-      preferred_time: preferredTime,
-      reason,
-      form: "Schedule request",
-      replyto: email,
-    });
+    let ok = await submitToWeb3Forms(
+      WEB3FORMS_CONTACT_KEY,
+      `New schedule request from ${name}`,
+      {
+        from_name: name,
+        name,
+        email,
+        phone,
+        preferred_time: preferredTime,
+        reason,
+        form: "Schedule request",
+        replyto: email,
+      },
+    );
 
     if (!ok) {
       try {

@@ -10,7 +10,7 @@ import { ProgressBar } from "./ProgressBar";
 import { QuestionCard } from "./QuestionCard";
 import { LeadCaptureForm, type LeadFields } from "./LeadCaptureForm";
 import { storeQuizResult } from "./session";
-import { submitToWeb3Forms } from "@/lib/web3forms";
+import { submitToWeb3Forms, WEB3FORMS_QUIZ_KEY } from "@/lib/web3forms";
 
 type Phase = "intro" | "questions" | "lead";
 
@@ -172,6 +172,7 @@ export function QuizFlow({ slug }: QuizFlowProps) {
           ? `${result.score}${result.maxScore ? ` of ${result.maxScore}` : ""}`
           : "Not scored numerically";
       void submitToWeb3Forms(
+        WEB3FORMS_QUIZ_KEY,
         `New screening lead: ${quiz.title} (${result.band})`,
         {
           from_name: lead.name,
