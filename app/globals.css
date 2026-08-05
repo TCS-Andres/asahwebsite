@@ -124,6 +124,28 @@ body {
 }
 
 /*
+  Affiliations marquee. The track holds two identical logo groups, so a shift
+  of exactly half the track loops with no visible seam. Pauses on hover of the
+  strip. Reduced motion users get a static row, handled in the block below.
+*/
+@keyframes asah-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.asah-marquee-track {
+  animation: asah-marquee 34s linear infinite;
+}
+
+.asah-marquee:hover .asah-marquee-track {
+  animation-play-state: paused;
+}
+
+/*
   Reduced motion safety net. Near zero out any animation or transition, including
   the hero scroll cue bounce and header color fades, for users who ask for less
   motion. Presentational only, no layout or content is affected.
@@ -136,5 +158,10 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .asah-marquee-track {
+    animation: none;
+    transform: none;
   }
 }

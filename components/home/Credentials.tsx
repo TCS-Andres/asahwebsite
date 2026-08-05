@@ -25,28 +25,53 @@ const credentials: Credential[] = [
 ];
 
 /*
-  Credentials strip: a quiet, desaturated row of certification and association
-  badges. Purely a trust signal, so the logos sit muted until hovered.
+  One group of logos. The visible group carries the real alt text and label.
+  The duplicated group is aria-hidden so the marquee loops seamlessly without
+  a screen reader announcing every badge twice. The trailing padding matches
+  the inner gap so the seam between the two groups keeps an even rhythm.
+*/
+function LogoGroup({ clone = false }: { clone?: boolean }) {
+  return (
+    <ul
+      aria-hidden={clone ? true : undefined}
+      aria-label={
+        clone ? undefined : "Certifications and professional affiliations"
+      }
+      className="flex shrink-0 items-center gap-x-14 pr-14 md:gap-x-20 md:pr-20"
+    >
+      {credentials.map((credential) => (
+        <li key={credential.alt} className="shrink-0">
+          <Image
+            src={credential.src}
+            alt={clone ? "" : credential.alt}
+            className="h-10 w-auto opacity-70 grayscale transition duration-300 ease-out group-hover:opacity-100 group-hover:grayscale-0 md:h-12"
+          />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/*
+  Affiliations and certifications marquee. A small strip that slides the trust
+  badges in a seamless loop. The set is duplicated so the loop has no seam, the
+  clone is aria-hidden, the slide pauses on hover, the edges fade out with a
+  mask, and reduced motion users see a static row (handled in globals.css).
 */
 export function Credentials() {
   return (
-    <Section background="cream">
+    <Section background="cream" className="py-14 md:py-16">
       <Container>
         <Reveal>
-          <ul
-            aria-label="Certifications and professional affiliations"
-            className="flex flex-wrap items-center justify-center gap-x-12 gap-y-8"
-          >
-            {credentials.map((credential) => (
-              <li key={credential.alt}>
-                <Image
-                  src={credential.src}
-                  alt={credential.alt}
-                  className="h-14 w-auto opacity-70 grayscale transition duration-200 ease-out hover:opacity-100 hover:grayscale-0 md:h-16"
-                />
-              </li>
-            ))}
-          </ul>
+          <p className="text-eyebrow text-center text-sage">
+            Affiliations and Certifications
+          </p>
+          <div className="asah-marquee group relative mt-7 overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]">
+            <div className="asah-marquee-track flex w-max">
+              <LogoGroup />
+              <LogoGroup clone />
+            </div>
+          </div>
         </Reveal>
       </Container>
     </Section>
