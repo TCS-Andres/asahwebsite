@@ -88,18 +88,21 @@ export function buildEpworthScoring(params: {
         "signal on this screening, so we have raised the level of this result. This suggests " +
         "you should be evaluated by a qualified provider.";
     } else if (index === 0) {
-      body = `Your Epworth score is ${score} out of 24, which falls in the normal range for daytime sleepiness.`;
+      body =
+        `Your Epworth score is ${score} out of 24, which falls in the normal range for daytime ` +
+        "sleepiness. Even so, a baseline airway and sleep evaluation is a good idea. Airway " +
+        "issues do not always show up as sleepiness, so an evaluation is a simple way to make " +
+        "sure nothing is missed.";
       if (otherChecked) {
         body +=
-          " You did check one or more symptoms that can be linked to airway issues. Because " +
-          "airway problems do not always show up as daytime sleepiness, an evaluation is still " +
-          "worth considering.";
+          " You also checked one or more symptoms that can be linked to airway issues, which " +
+          "makes that evaluation all the more worthwhile.";
       }
     } else if (index === 1) {
       body =
         `Your Epworth score is ${score} out of 24. Your responses suggest a mild level of ` +
-        "excessive daytime sleepiness. A consultation can help you understand what may be " +
-        "affecting your sleep.";
+        "excessive daytime sleepiness. Scheduling an evaluation is a good next step, so Dr. " +
+        "Culotta can understand what may be affecting your sleep.";
     } else if (index === 2) {
       body =
         `Your Epworth score is ${score} out of 24. Your responses suggest a moderate level of ` +
@@ -164,8 +167,9 @@ export function buildBearsScoring(params: {
         heading: "A reassuring picture",
         body:
           "Your answers did not point to any of the five sleep areas we look at, which is " +
-          `reassuring. ${params.growthSentence} Keeping gentle attention on sleep as your ` +
-          `${params.subject} grows is always worthwhile.`,
+          `reassuring. ${params.growthSentence} A visit with Dr. Culotta is still a wonderful ` +
+          `way to support healthy growth and make sure your ${params.subject}'s airway and ` +
+          "sleep are on track, so scheduling an evaluation is a good next step.",
         flaggedDomains: [],
       };
     }
@@ -198,8 +202,9 @@ export function buildTmjScoring(params: {
       heading = "Your responses suggest a lower likelihood of a jaw related issue";
       body =
         `You checked ${count} of the items on this list. Your responses suggest a lower chance ` +
-        "that a temporomandibular or jaw joint issue is behind these symptoms. If any of them " +
-        "affect daily life, it is still worth a conversation.";
+        "that a temporomandibular or jaw joint issue is behind these symptoms. Even so, an " +
+        "evaluation is a good idea, so a provider can take a closer look and make sure nothing " +
+        "is overlooked.";
     } else if (count <= 5) {
       band = "moderate";
       heading = "Your responses suggest it is worth an evaluation";

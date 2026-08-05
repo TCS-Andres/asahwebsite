@@ -5,9 +5,50 @@ import Link from "next/link";
 import { Section, Container, Button, Sunburst } from "@/components";
 import { siteConfig } from "@/lib/site";
 import { readQuizResult } from "./session";
+import { ResultGauge } from "./ResultGauge";
+import type { QuizResult } from "@/lib/quizzes/types";
 
 export interface ResultScreenProps {
   slug: string;
+}
+
+/*
+  Maps any result, numeric or not, onto the gauge. Numeric instruments use the
+  score fraction, a witnessed apnea answer pins the needle high, and the BEARS
+  screen maps its two outcomes to a low or higher position. The zone label is
+  reader friendly, never a clinical grade.
+*/
+function gaugeFrom(result: QuizResult): {
+  value: number;
+  zoneLabel: string;
+  detail?: string;
+} {
+  const zoneLabels: Record<string, string> = {
+    normal: "Lower range",
+    mild: "Mild range",
+    moderate: "Moderate range",
+    severe: "Higher range",
+    low: "Lower range",
+    high: "Higher range",
+    "no-areas-flagged": "A reassuring picture",
+    "areas-flagged": "Worth a closer look",
+  };
+  const zoneLabel = zoneLabels[result.band] ?? "Your result";
+
+  if (typeof result.score === "number" && typeof result.maxScore === "number" && result.maxScore > 0) {
+    let value = result.score / result.maxScore;
+    if (result.elevated) value = Math.max(value, 0.82);
+    return {
+      value: Math.max(0.05, Math.min(0.97, value)),
+      zoneLabel,
+      detail: `Score ${result.score} of ${result.maxScore}`,
+    };
+  }
+
+  return {
+    value: result.band === "areas-flagged" ? 0.7 : 0.28,
+    zoneLabel,
+  };
 }
 
 // A no-op external store. The subscribe never fires, so the value is read once
@@ -61,6 +102,7 @@ export function ResultScreen({ slug }: ResultScreenProps) {
 
   const { result, quizTitle, disclaimer } = data;
   const bookingHref = `${siteConfig.domain}/schedule/`;
+  const gauge = gaugeFrom(result);
 
   return (
     <main className="flex-1">
@@ -74,7 +116,16 @@ export function ResultScreen({ slug }: ResultScreenProps) {
             <div className="rounded-3xl bg-white p-8 shadow-sm md:p-12">
               <p className="text-eyebrow">{quizTitle}</p>
               <h1 className="text-h1 mt-3 text-forest">{result.heading}</h1>
-              <p className="text-body mt-5">{result.body}</p>
+
+              <div className="mt-8 rounded-2xl bg-cream/60 px-6 py-8">
+                <ResultGauge
+                  value={gauge.value}
+                  zoneLabel={gauge.zoneLabel}
+                  detail={gauge.detail}
+                />
+              </div>
+
+              <p className="text-body mt-6">{result.body}</p>
 
               {result.notes && result.notes.length > 0
                 ? result.notes.map((note, i) => (
