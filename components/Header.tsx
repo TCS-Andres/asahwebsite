@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { Button } from "./Button";
 import { MobileNav } from "./MobileNav";
@@ -18,10 +17,6 @@ import logo from "@/public/images/logos/logo-2.0-png.avif";
   panel are both keyboard accessible.
 */
 export function Header() {
-  const pathname = usePathname();
-  const isHome = pathname === "/";
-
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
 
@@ -33,18 +28,6 @@ export function Header() {
   const wasMobileOpen = useRef(false);
   const closeTimerRef = useRef<number | null>(null);
   const openedByHoverRef = useRef(false);
-
-  const solid = !isHome || scrolled;
-
-  // Track scroll position to toggle the solid state.
-  useEffect(() => {
-    function onScroll() {
-      setScrolled(window.scrollY > 8);
-    }
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   // Return focus to the hamburger after the mobile panel closes.
   useEffect(() => {
@@ -137,25 +120,14 @@ export function Header() {
     }
   }
 
-  const navLinkClass = solid
-    ? "text-forest hover:text-terracotta"
-    : "text-white hover:text-white/75";
-
-  const phonePillClass = solid
-    ? "border-sage text-sage hover:bg-sage hover:text-white"
-    : "border-white text-white hover:bg-white hover:text-forest";
-
-  const iconColorClass = solid ? "text-forest" : "text-white";
+  // The header is solid white on every route, so these classes are constant.
+  const navLinkClass = "text-forest hover:text-terracotta";
+  const phonePillClass = "border-sage text-sage hover:bg-sage hover:text-white";
+  const iconColorClass = "text-forest";
 
   return (
-    <header
-      className={`sticky top-0 z-40 transition-colors duration-300 ${
-        solid
-          ? "border-b border-forest/10 bg-white/80 shadow-soft backdrop-blur-md"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between gap-6 px-6">
+    <header className="sticky top-0 z-40 border-b border-forest/10 bg-white shadow-soft">
+      <div className="mx-auto flex h-24 w-full max-w-7xl items-center justify-between gap-6 px-6">
         {/* Logo */}
         <Link
           href="/"
@@ -166,7 +138,7 @@ export function Header() {
             src={logo}
             alt="Austin Sleep & Airway Health"
             priority
-            className={`h-11 w-auto ${solid ? "" : "brightness-0 invert"}`}
+            className="h-14 w-auto md:h-16"
           />
         </Link>
 

@@ -6,15 +6,14 @@ import { siteConfig } from "@/lib/site";
 
 /*
   Full bleed homepage hero. An ambient background video sits behind a forest to
-  ink gradient so the copy and the transparent header both stay legible. The
-  heading and copy are server rendered for a fast, stable LCP; only the video
-  element is a client component, and it holds on the poster still until motion is
-  allowed. The negative top margin pulls the hero up under the sticky header so
-  the header floats over the video.
+  ink gradient so the copy stays legible. The heading and copy are server
+  rendered for a fast, stable LCP; only the video element is a client component,
+  and it holds on the poster still until motion is allowed. The header is solid
+  white and sits above the hero, so the hero fills the viewport below it.
 */
 export function Hero() {
   return (
-    <section className="relative -mt-20 flex min-h-[100svh] items-center overflow-hidden">
+    <section className="relative flex min-h-[calc(100svh-6rem)] items-center overflow-hidden">
       <HeroVideo
         src="/videos/hero-ambient.mp4"
         poster="/images/general/hero-video-poster.avif"

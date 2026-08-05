@@ -24,7 +24,7 @@ export function Footer() {
             <Image
               src={logo}
               alt="Austin Sleep & Airway Health"
-              className="h-12 w-auto brightness-0 invert"
+              className="h-20 w-auto brightness-0 invert md:h-24"
             />
             <p className="mt-5 text-small text-cream/80">
               Airway and sleep focused dental care for the whole family in

@@ -12,8 +12,14 @@ import { QuizCTA } from "@/components/QuizCTA";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { FAQAccordion } from "@/components/FAQAccordion";
 import { RelatedServices } from "@/components/RelatedServices";
+import { ServiceSections } from "@/components/ServiceSections";
+import { TakeTheFirstStep } from "@/components/home/TakeTheFirstStep";
 import { JsonLd } from "@/components/JsonLd";
-import { getAllServices, getServiceBySlug } from "@/lib/content";
+import {
+  getAllServices,
+  getServiceBySlug,
+  parseServiceBody,
+} from "@/lib/content";
 import { siteConfig } from "@/lib/site";
 import { buildMetadata } from "@/lib/seo";
 import {
@@ -86,6 +92,8 @@ export default async function ServicePage({
     );
   }
 
+  const { intro, sections } = parseServiceBody(service.body);
+
   return (
     <main className="flex-1">
       <JsonLd data={jsonLd} />
@@ -128,16 +136,22 @@ export default async function ServicePage({
         </Container>
       </Section>
 
-      <Section background="white">
-        <Container>
-          <div className="prose prose-lg mx-auto max-w-3xl prose-headings:font-display prose-headings:text-forest prose-p:text-ink prose-li:text-ink prose-strong:text-forest prose-a:text-terracotta">
-            <Markdown remarkPlugins={[remarkGfm]}>{service.body}</Markdown>
-          </div>
-        </Container>
-      </Section>
+      {intro && (
+        <Section background="white">
+          <Container>
+            <div className="prose prose-lg mx-auto max-w-3xl text-center prose-p:text-body prose-p:text-ink/80">
+              <Markdown remarkPlugins={[remarkGfm]}>{intro}</Markdown>
+            </div>
+          </Container>
+        </Section>
+      )}
+
+      <ServiceSections slug={service.slug} sections={sections} />
+
+      <TakeTheFirstStep />
 
       {service.faqs.length > 0 && (
-        <Section background="cream">
+        <Section background="white">
           <Container>
             <div className="mx-auto max-w-3xl">
               <EyebrowHeading
@@ -157,7 +171,7 @@ export default async function ServicePage({
       )}
 
       {related.length > 0 && (
-        <Section background="white">
+        <Section background="cream">
           <Container>
             <RelatedServices services={related} />
           </Container>

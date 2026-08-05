@@ -43,6 +43,57 @@ export interface Service extends ServiceFrontmatter {
   body: string;
 }
 
+/* One H2 section of a service body: its heading plus the markdown beneath it. */
+export interface ServiceSection {
+  heading: string;
+  body: string;
+}
+
+/* A service body split for the page layout: the lead paragraph before the
+   first H2, then each H2 section. The standardized "Take the First Step"
+   section is dropped here because the page renders it as cards instead. */
+export interface ParsedServiceBody {
+  intro: string;
+  sections: ServiceSection[];
+}
+
+export function parseServiceBody(body: string): ParsedServiceBody {
+  const introLines: string[] = [];
+  const sections: ServiceSection[] = [];
+  let current: { heading: string; lines: string[] } | null = null;
+
+  for (const line of body.split("\n")) {
+    // Match an H2 line exactly, two hashes then a space, never an H3.
+    const match = /^## (.+?)\s*$/.exec(line);
+    if (match) {
+      if (current) {
+        sections.push({
+          heading: current.heading,
+          body: current.lines.join("\n").trim(),
+        });
+      }
+      current = { heading: match[1], lines: [] };
+    } else if (current) {
+      current.lines.push(line);
+    } else {
+      introLines.push(line);
+    }
+  }
+  if (current) {
+    sections.push({
+      heading: current.heading,
+      body: current.lines.join("\n").trim(),
+    });
+  }
+
+  return {
+    intro: introLines.join("\n").trim(),
+    sections: sections.filter(
+      (section) => !/take the first step/i.test(section.heading),
+    ),
+  };
+}
+
 function readService(fileName: string): Service {
   const fullPath = path.join(servicesDirectory, fileName);
   const raw = fs.readFileSync(fullPath, "utf8");
