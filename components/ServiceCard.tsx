@@ -81,17 +81,21 @@ export function ServiceCard({
 
         <div>
           {/*
-            The title stays fully legible at rest and brightens as one unit on
-            hover, a gentle fade in unison rather than a per letter roll, which
-            clipped the text mid motion and was hard to read. Gated behind
-            motion-safe, so reduced motion users see the static full white title.
+            At rest the card shows only the image and the service name. The
+            body copy stays collapsed and fades up into view on hover, and on
+            keyboard focus of the card so it is reachable without a pointer.
+            The grid rows trick animates the height smoothly, the inner wrapper
+            clips the text while collapsed, and the summary stays in the DOM so
+            screen readers still read it. The title brightens in unison on hover.
           */}
-          <span className="block font-display text-2xl leading-[1.2] text-white transition-opacity duration-500 ease-out motion-safe:opacity-85 motion-safe:group-hover:opacity-100">
+          <span className="block font-display text-2xl leading-[1.2] text-white transition-opacity duration-500 ease-out motion-safe:opacity-90 motion-safe:group-hover:opacity-100">
             {title}
           </span>
-          <p className="text-small mt-1.5 line-clamp-2 max-w-md text-cream/85">
-            {summary}
-          </p>
+          <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-out group-hover:max-h-28 group-hover:opacity-100 group-focus-visible:max-h-28 group-focus-visible:opacity-100">
+            <p className="text-small line-clamp-3 max-w-md pt-2 text-cream/90">
+              {summary}
+            </p>
+          </div>
         </div>
       </div>
     </Link>
