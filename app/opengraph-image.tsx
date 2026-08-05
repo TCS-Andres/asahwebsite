@@ -1,17 +1,16 @@
 /*
-  Default Open Graph image, applied to every route by the file based metadata
-  convention. Forest background, the practice name in Super Clarendon, a gold
-  accent rule, and an Austin, TX subline in a system sans.
-
-  The headline font is loaded from the local TTF in public/fonts because the
-  next/og renderer does not support woff2. The subline intentionally uses a
-  system sans, since Mona Sans ships only as a woff2 variable font here.
+  Default Open Graph share card, applied to every route by the file based
+  metadata convention. Forest background with the brand sun mark rising over
+  the practice name in Super Clarendon and an Austin, TX tagline. The headline
+  font is loaded from the local TTF because the next/og renderer does not read
+  woff2. The sun is the trimmed logo mark embedded as a data URI.
 */
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-export const alt = "Austin Sleep & Airway Health, airway and sleep care in Austin, TX";
+export const alt =
+  "Austin Sleep & Airway Health, airway and sleep care in Austin, TX";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -21,9 +20,11 @@ const CREAM = "#F5F5F0";
 const GOLD = "#CCA257";
 
 export default async function OpengraphImage() {
-  const clarendon = await readFile(
-    join(process.cwd(), "public/fonts/SuperClarendon-Bold.ttf"),
-  );
+  const [clarendon, sunData] = await Promise.all([
+    readFile(join(process.cwd(), "public/fonts/SuperClarendon-Bold.ttf")),
+    readFile(join(process.cwd(), "public/og-sun.png")),
+  ]);
+  const sunSrc = `data:image/png;base64,${sunData.toString("base64")}`;
 
   return new ImageResponse(
     (
@@ -33,44 +34,25 @@ export default async function OpengraphImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
+          alignItems: "center",
           justifyContent: "center",
           backgroundColor: FOREST,
-          padding: "90px",
+          padding: "72px",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            fontSize: 30,
-            letterSpacing: 6,
-            textTransform: "uppercase",
-            color: GOLD,
-            fontWeight: 700,
-          }}
-        >
-          Austin, TX
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={sunSrc} width={520} height={212} alt="" />
 
         <div
           style={{
             display: "flex",
-            marginTop: 28,
-            width: 120,
-            height: 8,
-            backgroundColor: GOLD,
-            borderRadius: 4,
-          }}
-        />
-
-        <div
-          style={{
-            display: "flex",
-            marginTop: 36,
+            marginTop: 12,
             fontFamily: "Super Clarendon",
-            fontSize: 96,
+            fontSize: 82,
             lineHeight: 1.05,
             color: CREAM,
-            maxWidth: 960,
+            textAlign: "center",
+            maxWidth: 1000,
           }}
         >
           Austin Sleep & Airway Health
@@ -79,10 +61,11 @@ export default async function OpengraphImage() {
         <div
           style={{
             display: "flex",
-            marginTop: 40,
-            fontSize: 40,
-            color: CREAM,
-            opacity: 0.85,
+            marginTop: 26,
+            fontSize: 34,
+            letterSpacing: 2,
+            color: GOLD,
+            fontWeight: 700,
           }}
         >
           Airway and Sleep Care in Austin, TX

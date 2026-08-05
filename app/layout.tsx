@@ -60,8 +60,20 @@ const HOME_OG_TITLE =
 const HOME_DESCRIPTION =
   "Dr. Kacie Culotta offers airway focused dental and sleep care in Austin, TX, helping you breathe easier and sleep better with comfortable, personalized care.";
 
+/*
+  The base URL that resolves the share image to an absolute link. It follows
+  the live deployment so a shared link renders a working preview before the
+  DNS cutover: the Vercel production domain now, and austinsleephealth.com once
+  that is set as the production domain. NEXT_PUBLIC_SITE_URL overrides it.
+*/
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "https://austinsleephealth.com");
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://austinsleephealth.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: HOME_TITLE,
     template: "%s | Austin Sleep & Airway Health",
@@ -70,7 +82,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: HOME_OG_TITLE,
     description: HOME_DESCRIPTION,
-    url: "https://austinsleephealth.com/",
+    url: `${SITE_URL}/`,
     siteName: "Austin Sleep & Airway Health",
     locale: "en_US",
     type: "website",

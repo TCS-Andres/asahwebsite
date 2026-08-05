@@ -4,7 +4,7 @@ import { Container } from "@/components/Container";
 import { EyebrowHeading } from "@/components/EyebrowHeading";
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/Section";
-import doctorImage from "@/public/images/doctor/dr-kacie-culotta.avif";
+import doctorImage from "@/public/images/doctor/dr.kacie-1.avif";
 
 /*
   Meet Dr. Culotta: the personal, first person bio on the forest band. The
