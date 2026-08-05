@@ -11,6 +11,7 @@ import { MeetDoctor } from "@/components/home/MeetDoctor";
 import { Credentials } from "@/components/home/Credentials";
 import { GoogleReviews } from "@/components/home/GoogleReviews";
 import { TakeTheFirstStep } from "@/components/home/TakeTheFirstStep";
+import { VisitUs } from "@/components/home/VisitUs";
 
 /*
   Homepage. Sections alternate white and cream with a single forest band on the
@@ -38,6 +39,7 @@ export default function Home() {
       <GoogleReviews />
       <QuizCTA />
       <TakeTheFirstStep />
+      <VisitUs />
     </main>
   );
 }
