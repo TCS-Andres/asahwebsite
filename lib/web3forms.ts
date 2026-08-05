@@ -14,12 +14,16 @@
 */
 
 /*
-  The Web3Forms access key is a UUID that Web3Forms emails when you create a
-  form. Set NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY to that UUID in Vercel to turn on
-  delivery. Until it is set this returns false, so callers fall back to their
-  server route and nothing hard fails.
+  The Web3Forms access key is a UUID that Web3Forms issues per form. This is the
+  key for the "Austin Sleep & Airway Health" form. Web3Forms states it is a
+  public key that is safe in client side code, and the free plan only accepts
+  submissions from the browser, so it lives here rather than a server secret.
+  NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY overrides it per environment if the key is
+  ever rotated. Restrict the key to the site domains in the Web3Forms dashboard.
 */
-const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "";
+const ACCESS_KEY =
+  process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ||
+  "6161854f-645e-4d79-8ebe-4ec21ed2eedd";
 
 const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 
