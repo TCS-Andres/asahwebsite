@@ -58,7 +58,7 @@ const HOME_TITLE = "Airway & Sleep Dentist in Austin, TX";
 const HOME_OG_TITLE =
   "Airway & Sleep Dentist in Austin, TX | Austin Sleep & Airway Health";
 const HOME_DESCRIPTION =
-  "Dr. Kacie Culotta offers airway focused dental and sleep care in Austin, TX, helping you breathe easier and sleep better with comfortable, personalized care.";
+  "Dr. Kacie Culotta and her team provide personalized dental airway and sleep care in Austin, TX, helping you and your family overcome airway challenges and enjoy a healthier, thriving life.";
 
 /*
   The base URL that resolves the share image to an absolute link. It follows
