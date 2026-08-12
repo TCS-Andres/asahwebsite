@@ -43,8 +43,8 @@ export default function SchedulePage() {
             />
             <p className="text-body mt-6 text-ink">
               The fastest way to book is to give us a call. Reach our team during
-              office hours, Monday, Tuesday, and Friday from 8:00 AM to 3:30 PM,
-              and we will find a time that works for you.
+              office hours, Monday, Tuesday, Thursday, and Friday from 8:00 AM to
+              3:00 PM, and we will find a time that works for you.
             </p>
 
             <div className="mt-8">

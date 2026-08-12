@@ -28,18 +28,15 @@ const credentials = [
     rest: " specializing in airway-focused dentistry.",
   },
   {
+    lead: "D.ABDSM",
+    rest: ": Diplomate of the American Board of Dental Sleep Medicine.",
+  },
+  {
     lead: "Qualified Dentist",
     rest: " with the American Academy of Dental Sleep Medicine.",
   },
   { lead: null, rest: "Breathe Institute Ambassador" },
-  { lead: null, rest: "Trained by Dr. Chelsea Pinto" },
-  { lead: null, rest: "Trained by Dr. Bobby Ghaheri" },
-  { lead: null, rest: "Trained by Dr. Meghna Dassani" },
   { lead: null, rest: "Breathe Institute Myofunctional Mastermind" },
-  {
-    lead: null,
-    rest: "American Academy of Dental Sleep Medicine, Qualified Dentist",
-  },
 ];
 
 const badges = [

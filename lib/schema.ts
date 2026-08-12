@@ -29,7 +29,7 @@ const GEO = {
 /*
   Dentist (a MedicalBusiness subtype) for the homepage. Opening hours are built
   from the machine readable fields in siteConfig, so only the open days
-  (Monday, Tuesday, Friday, 08:00 to 15:30) appear. sameAs is included only when
+  (Monday, Tuesday, Thursday, Friday, 08:00 to 15:00) appear. sameAs is included only when
   a social URL is present, so with both currently empty it is omitted. priceRange
   and aggregateRating are intentionally omitted: no verified pricing or review
   data exists, and inventing it would be misleading.

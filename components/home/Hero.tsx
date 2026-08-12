@@ -41,9 +41,9 @@ export function Hero() {
           <p className="text-body mt-6 max-w-2xl text-cream/90">
             At Austin Sleep and Airway Health, we know that true health begins
             with breathing well and sleeping soundly. Dr. Kacie Culotta and her
-            team provide personalized airway and sleep care to help you and your
-            family overcome airway challenges and enjoy a healthier, thriving
-            life.
+            team provide personalized dental airway and sleep care to help you
+            and your family overcome airway challenges and enjoy a healthier,
+            thriving life.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-4">
             <Button href={siteConfig.scheduleHref}>Schedule Appointment</Button>

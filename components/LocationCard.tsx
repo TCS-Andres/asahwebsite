@@ -11,7 +11,7 @@ export interface LocationCardProps {
   LocationCard is the reusable NAP block (name, address, phone) with office
   hours. Every value comes from siteConfig, so there is no hardcoded contact
   data here. Used on the contact page and the schedule page. Hours are listed
-  Monday first with open ranges written "8:00 AM to 3:30 PM" and closed days
+  Monday first with open ranges written "8:00 AM to 3:00 PM" and closed days
   shown as "Closed".
 */
 export function LocationCard({
