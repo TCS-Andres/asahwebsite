@@ -8,8 +8,9 @@ import logo from "@/public/images/logos/logo-2.0-png.avif";
 /*
   Global site footer. Forest band with cream text. Three link and contact
   columns matching the live footer: Menu, Services, and Say Hello. Every phone,
-  email, address, and hours value is read from siteConfig. No social icons for
-  now, the client URLs are still pending.
+  email, address, and hours value is read from siteConfig. The Instagram icon
+  links to Dr. Culotta's account and only renders when the URL is set; the
+  Facebook URL is still pending.
 */
 export function Footer() {
   const year = new Date().getFullYear();
@@ -30,6 +31,31 @@ export function Footer() {
               Airway and sleep focused dental care for the whole family in
               Austin, Texas.
             </p>
+            {siteConfig.social.instagram ? (
+              <a
+                href={siteConfig.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Follow Dr. Kacie Culotta on Instagram"
+                className="mt-6 inline-flex h-11 w-11 items-center justify-center rounded-full border border-cream/25 text-cream transition hover:bg-cream hover:text-forest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cream"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg>
+              </a>
+            ) : null}
           </div>
 
           {/* Menu */}

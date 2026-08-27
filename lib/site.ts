@@ -70,8 +70,8 @@ export const siteConfig: SiteConfig = {
   scheduleHref: "/schedule/",
   quizHubHref: "/sleep-apnea-test/",
   social: {
-    // URLs are pending from the client.
+    // Facebook URL is still pending from the client.
     facebook: "",
-    instagram: "",
+    instagram: "https://www.instagram.com/dr.kacieculotta",
   },
 };
