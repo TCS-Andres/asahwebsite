@@ -12,8 +12,14 @@ import { getAllServices } from "@/lib/content";
 import { getAllPosts } from "@/lib/blog";
 import { quizSlugs } from "@/lib/quizzes";
 
+// Re-render hourly so scheduled posts join the sitemap on their publish date.
+export const revalidate = 3600;
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
+  // Published posts only; scheduled posts stay out until their date.
+  const posts = getAllPosts();
+  const latestPost = posts[0]?.updatedAt;
 
   const staticEntries: MetadataRoute.Sitemap = [
     { url: absoluteUrl("/"), lastModified: now, changeFrequency: "weekly", priority: 1 },
@@ -23,7 +29,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: absoluteUrl("/patient-resources/"), lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: absoluteUrl("/services/"), lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: absoluteUrl("/sleep-apnea-test/"), lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    { url: absoluteUrl("/blog/"), lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    {
+      url: absoluteUrl("/blog/"),
+      lastModified: latestPost ? new Date(`${latestPost}T00:00:00Z`) : now,
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
   ];
 
   const serviceEntries: MetadataRoute.Sitemap = getAllServices().map((service) => ({
@@ -40,7 +51,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  const blogEntries: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
+  // lastModified is the post's own date, never the build time.
+  const blogEntries: MetadataRoute.Sitemap = posts.map((post) => ({
     url: absoluteUrl(`/${post.slug}/`),
     lastModified: new Date(`${post.updatedAt}T00:00:00Z`),
     changeFrequency: "monthly",

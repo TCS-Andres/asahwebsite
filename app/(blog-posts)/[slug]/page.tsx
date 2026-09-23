@@ -2,26 +2,43 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BlogCard } from "@/components/BlogCard";
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Container";
 import { Section } from "@/components/Section";
 import { Markdown } from "@/components/Markdown";
 import { QuizCTA } from "@/components/QuizCTA";
 import { JsonLd } from "@/components/JsonLd";
-import { getPostBySlug, getPostSlugs, formatPostDate } from "@/lib/blog";
+import {
+  getPostBySlug,
+  getPostSlugs,
+  getPostFaqs,
+  getRelatedPosts,
+  formatPostDate,
+} from "@/lib/blog";
+import { resolveBlogCta } from "@/lib/blog-cta";
 import { buildMetadata } from "@/lib/seo";
-import { articleSchema, breadcrumbSchema } from "@/lib/schema";
+import {
+  articleSchema,
+  breadcrumbSchema,
+  faqPageSchema,
+} from "@/lib/schema";
 
 /*
-  Root-level blog post route. The three migrated posts live at the top level of
-  the domain (no /blog/ prefix) to match the live site exactly, so this dynamic
-  segment sits inside the (blog-posts) route group, which does not add a path
-  segment. Static pages like /about-us/ take precedence over this dynamic
-  segment; only the three generated slugs render here and everything else 404s.
-*/
+  Root-level blog post route. Posts live at the top level of the domain (no
+  /blog/ prefix) to match the live site, so this dynamic segment sits inside
+  the (blog-posts) route group, which does not add a path segment. Static pages
+  like /about-us/ take precedence over this dynamic segment.
 
-// Only the three known slugs are generated. Any other slug returns a 404.
-export const dynamicParams = false;
+  Scheduling: generateStaticParams prerenders the posts that are already
+  published. A scheduled post is not prerendered; once its date arrives, the
+  first request renders it on demand and it is cached from then on. Anything
+  that is not a published post, whether an unknown slug or a post whose date
+  has not arrived, calls notFound(), so arbitrary root slugs never render
+  content. The hourly revalidate lets a cached 404 for a scheduled slug flip to
+  the live post on its publish date.
+*/
+export const revalidate = 3600;
 
 export function generateStaticParams() {
   return getPostSlugs().map((slug) => ({ slug }));
@@ -45,38 +62,6 @@ export async function generateMetadata({
   });
 }
 
-/*
-  Closing CTA target per post. The oral appliance post points to the sleep
-  appliances service; the clinic guide points to the sleep screening hub; the
-  silent-crisis post points to CBCT airway screenings. These service routes are
-  owned by other workers.
-*/
-const postCta: Record<
-  string,
-  { href: string; label: string; heading: string; body: string }
-> = {
-  "what-to-expect-at-an-austin-sleep-apnea-clinic-a-complete-patient-guide": {
-    href: "/sleep-apnea-test/",
-    label: "Take the Sleep Screening",
-    heading: "Wondering whether a sleep evaluation is right for you?",
-    body: "Take our quick, educational sleep apnea screening to better understand your risk factors.",
-  },
-  "why-sleep-apnea-is-a-silent-health-crisis-in-austin-and-how-to-catch-it-early":
-    {
-      href: "/services/cbct-airway-screenings/",
-      label: "Explore CBCT Airway Screenings",
-      heading: "Catch airway issues early",
-      body: "See how a CBCT airway screening reveals structural details a routine exam can miss.",
-    },
-  "how-oral-appliance-therapy-works-austins-most-comfortable-alternative-to-cpap":
-    {
-      href: "/services/sleep-appliances/",
-      label: "Explore Sleep Appliances",
-      heading: "A comfortable option worth exploring",
-      body: "Learn how a custom oral appliance gently keeps the airway open during sleep.",
-    },
-};
-
 export default async function BlogPostPage({
   params,
 }: {
@@ -89,7 +74,12 @@ export default async function BlogPostPage({
     notFound();
   }
 
-  const cta = postCta[post.slug];
+  const cta = resolveBlogCta(post);
+  const faqs = getPostFaqs(post);
+  const related = getRelatedPosts(post.slug, 3);
+  // The sage quiz banner repeats the screening push, so skip it when the
+  // post's own CTA already points to a screening.
+  const showQuizBanner = !cta.href.startsWith("/sleep-apnea-test/");
 
   return (
     <main className="flex-1">
@@ -108,6 +98,7 @@ export default async function BlogPostPage({
             { name: "Blog", url: "/blog/" },
             { name: post.title },
           ]),
+          ...(faqs.length > 0 ? [faqPageSchema(faqs)] : []),
         ]}
       />
       <Section background="white">
@@ -119,15 +110,21 @@ export default async function BlogPostPage({
             &larr; Back to Blog
           </Link>
 
-          <h1 className="text-h1 mt-6 text-forest">{post.title}</h1>
+          <p className="text-eyebrow mt-8">{post.category}</p>
+          <h1 className="text-h1 mt-3 text-forest">{post.title}</h1>
           <p className="text-small mt-4 text-ink/70">
-            Published {formatPostDate(post.publishedAt)}
+            Published{" "}
+            <time dateTime={post.publishedAt}>
+              {formatPostDate(post.publishedAt)}
+            </time>
+            <span aria-hidden="true"> · </span>
+            {post.readingMinutes} min read
           </p>
 
-          <div className="relative mt-8 aspect-video w-full overflow-hidden rounded-2xl">
+          <div className="relative mt-8 aspect-video w-full overflow-hidden rounded-2xl bg-cream">
             <Image
               src={post.image}
-              alt={post.title}
+              alt={post.imageAlt}
               fill
               sizes="(min-width: 768px) 48rem, 100vw"
               className="object-cover"
@@ -139,27 +136,60 @@ export default async function BlogPostPage({
             <Markdown>{post.content}</Markdown>
           </div>
 
-          <p className="text-small mt-12 border-t border-sage/20 pt-6 font-semibold text-forest">
-            By Austin Sleep &amp; Airway Health
-          </p>
+          <div className="mt-12 border-t border-sage/20 pt-6">
+            <p className="text-small font-semibold text-forest">
+              By Austin Sleep &amp; Airway Health
+            </p>
+            <p className="text-small mt-2 text-ink/70">
+              This article is for general education. It is not a diagnosis and
+              does not replace an evaluation with a qualified provider.
+            </p>
+          </div>
         </Container>
       </Section>
 
-      {cta && (
-        <Section background="forest">
-          <Container>
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-h2 text-cream">{cta.heading}</h2>
-              <p className="text-body mt-4 text-cream">{cta.body}</p>
-              <div className="mt-8">
-                <Button href={cta.href}>{cta.label}</Button>
-              </div>
+      <Section background="forest">
+        <Container>
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-h2 text-cream">{cta.heading}</h2>
+            <p className="text-body mt-4 text-cream">{cta.body}</p>
+            <div className="mt-8">
+              <Button href={cta.href}>{cta.label}</Button>
             </div>
+          </div>
+        </Container>
+      </Section>
+
+      {related.length > 0 && (
+        <Section background="cream">
+          <Container>
+            <p className="text-eyebrow">Keep Reading</p>
+            <h2 className="text-h2 mt-3 text-forest">Related articles</h2>
+            <ul className="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {related.map((item) => (
+                <li key={item.slug} className="h-full">
+                  <BlogCard
+                    headingAs="h3"
+                    post={{
+                      slug: item.slug,
+                      title: item.title,
+                      excerpt: item.excerpt,
+                      publishedAt: item.publishedAt,
+                      displayDate: formatPostDate(item.publishedAt),
+                      image: item.image,
+                      imageAlt: item.imageAlt,
+                      category: item.category,
+                      readingMinutes: item.readingMinutes,
+                    }}
+                  />
+                </li>
+              ))}
+            </ul>
           </Container>
         </Section>
       )}
 
-      <QuizCTA />
+      {showQuizBanner && <QuizCTA />}
     </main>
   );
 }

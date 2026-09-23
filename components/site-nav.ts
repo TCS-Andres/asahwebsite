@@ -45,7 +45,7 @@ export const primaryNav: NavLink[] = [
 ];
 
 /*
-  Footer Menu column, in live order. The footer labels the quiz destination
+  Footer Menu column, in live order plus the Blog link. The footer labels the quiz destination
   "Sleep Apnea Test" while the header calls it "Sleep Apnea Quiz". Both point
   to the same quiz hub.
 */
@@ -53,6 +53,7 @@ export const footerMenu: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about-us/" },
   { label: "Patient Resources", href: "/patient-resources/" },
+  { label: "Blog", href: "/blog/" },
   { label: "Contact Us", href: "/contact-us/" },
   { label: "Sleep Apnea Test", href: "/sleep-apnea-test/" },
   { label: "Terms & Conditions", href: "/terms-and-conditions/" },
