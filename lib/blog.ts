@@ -120,6 +120,14 @@ export function getAllPosts(): BlogPost[] {
   return readAllPosts().filter((post) => isPublished(post, today));
 }
 
+/*
+  Every post, published or scheduled, oldest first. Only the blog tracker feed
+  (app/blog-index.csv) uses this, so scheduled posts still never render on the site.
+*/
+export function getAllPostsIncludingScheduled(): BlogPost[] {
+  return [...readAllPosts()].reverse();
+}
+
 /* Published slugs, used by generateStaticParams. */
 export function getPostSlugs(): string[] {
   return getAllPosts().map((post) => post.slug);
