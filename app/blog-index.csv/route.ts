@@ -13,13 +13,15 @@
   which the sheet renders with =IMAGE(). Keep those two LAST: the sheet's own
   columns (cover thumbnail, Approval, Notes) start right after the import.
 
-  Rows are in date order, oldest first, so a new post lands at the bottom and
-  existing rows never shift. The team types an Approval status into each row,
-  so a post dated before existing posts would misalign them: never backdate.
-
   Optional `?from=YYYY-MM-DD` limits the feed to that date onward, and
   `?order=desc` returns newest first. Absent or malformed values fall back to
   everything, ascending.
+
+  The sheet uses both. Its Blog Calendar tab imports `?order=desc` so the
+  newest posts sit on top. Its Approvals tab imports `?from=2026-10-15` in date
+  order, and the team types each Approval there, beside its post. New posts
+  append to the bottom of that tab, so typed rows never shift. A post dated
+  before existing ones would shift them and misalign Approvals: never backdate.
 
   Re-renders hourly so links appear on schedule without a redeploy.
 */
